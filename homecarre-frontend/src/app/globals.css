@@ -7,20 +7,4 @@
 }
 
 @layer base {
-  .bg-gradient-to-r {
-    background-image: linear-gradient(
-      to right, 
-      #1e3a8a 0%, 
-      #6b21a8 50%,
-      #e53e3e 100%
-    );
-  }
-  .bg-gradient-to-br {
-    background-image: linear-gradient(
-      to bottom right, 
-      #1e3a8a 20%, 
-      #6b21a8 50%,  
-      #e53e3e 80%  
-    );
-  }
 }
