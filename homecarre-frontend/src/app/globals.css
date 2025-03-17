@@ -4,7 +4,13 @@
   --color-primary: #0e0125;
 
   --radius-fig: 2.5rem;
+
 }
 
 @layer base {
+}
+
+.ant-menu-item:hover {
+  background-color: #ff5733 !important;
+  color: white !important;
 }

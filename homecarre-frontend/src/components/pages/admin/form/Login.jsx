@@ -42,7 +42,7 @@ const Login = () => {
 
           <Form.Item>
             <Button
-            color="pink"
+              color="pink"
               variant="solid"
               htmlType="submit"
               loading={loading}
