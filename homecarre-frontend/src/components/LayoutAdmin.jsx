@@ -14,13 +14,13 @@ const LayoutAdmin = ({ children }) => {
       <div className="flex">
         <AdminSidebar
           isOpen={isOpen}
-          className={`transition-all duration-300 ease-in-out transform fixed top-0 left-0 h-full bg-gray-800${
+          className={`transition-all duration-300 ease-in-out transform relative top-0 left-0 h-full bg-gray-800${
             isOpen ? "w-64" : "w-14"
           }`}
         />
         <div
           className={`flex flex-col w-full transition-all duration-300 ease-in-out transform ${
-            isOpen ? "ml-64" : "ml-14"
+            isOpen ? "pl-64" : "pl-14"
           }`}
         >
           <AdminNavbar toggleSidebar={() => setIsOpen(!isOpen)} />
