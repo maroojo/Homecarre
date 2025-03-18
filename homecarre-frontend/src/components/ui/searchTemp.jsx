@@ -28,7 +28,7 @@ const SearchTemp = ({ onSearch, pickDate = true }) => {
   return (
     <Form
       onFinish={handleSearch}
-      className="flex flex-wrap items-end sm:gap-4"
+      className="flex flex-wrap items-end sm:gap-4 mb-4"
       layout="vertical"
     >
       <Form.Item

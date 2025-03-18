@@ -21,6 +21,16 @@ const Admin = () => {
     setSelectedId(record.id);
   };
 
+  const handleRow = (record) => ({
+    onClick: (e) => {
+      if (e.target.closest("button")) {
+        return;
+      }
+      handleRowClick(record);
+    },
+    className: "cursor-pointer",
+  });
+
   return (
     <div>
       <Row className="flex sm:justify-between items-end">
@@ -31,13 +41,11 @@ const Admin = () => {
         columns={columns}
         data={data}
         loading={loading}
-        onRow={(record) => ({
-          onClick: () => handleRowClick(record),
-        })}
+        onRow={handleRow}
       />
       <Modal
         title="Contract ID"
-        visible={selectedId !== null}
+        open={selectedId !== null}
         onCancel={() => setSelectedId(null)}
         footer={null}
       >

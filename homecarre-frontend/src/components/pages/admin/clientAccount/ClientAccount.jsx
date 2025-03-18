@@ -16,7 +16,7 @@ const ClientAccount = () => {
 
   return (
     <div>
-      <Row className="flex sm:justify-between items-end mb-4">
+      <Row className="flex sm:justify-between items-end">
         <SearchTemp onSearch={handleSearch} />
         <Tag>{`total : 30`}</Tag>
       </Row>

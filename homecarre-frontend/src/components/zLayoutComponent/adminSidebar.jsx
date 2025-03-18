@@ -9,10 +9,12 @@ import {
   DesktopOutlined,
   HomeOutlined,
   UserOutlined,
+  LogoutOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 
-const AdminSidebar = ({ isOpen }) => {
+const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const router = useRouter();
   const pathname = usePathname() || "/admin";
 
@@ -20,59 +22,76 @@ const AdminSidebar = ({ isOpen }) => {
     {
       key: "/admin",
       icon: <HomeOutlined />,
-      label: "Homecarre",
-      onClick: () => router.push("/admin"),
+      label: isOpen ? "Homecarre" : null,
     },
     {
-      key: "2",
+      key: "/admin/request",
       icon: <DesktopOutlined />,
-      label: "Option 2",
+      label: isOpen ? "Repair Request" : null,
     },
     {
-      key: "3",
+      key: "/admin/payment",
       icon: <ContainerOutlined />,
-      label: "Option 3",
+      label: isOpen ? "Payment" : null,
     },
     {
-      key: "4",
+      key: "/admin/client",
       icon: <UserOutlined />,
-      label: "Client Account",
-      onClick: () => router.push("/admin/client"),
+      label: isOpen ? "Client Account" : null,
     },
   ];
 
+  const handleLogout = () => {
+    console.log("User logged out");
+  };
+
   return (
-    <div
-      className={`fixed top-0 left-0 h-full bg-gray-600 text-white transition-all duration-300 ${
-        isOpen ? "w-64" : "w-14"
-      }`}
-    >
-      <div className="p-2 flex justify-between items-center">
-        <Image
-          src={"/icon.svg"}
-          alt="Logo"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-        <span
-          className={`${
-            isOpen ? "visible" : "hidden"
-          } transition-all duration-300`}
+    <div className="w-full">
+      <div className={`p-2 flex justify-between items-center relative text-white`}>
+        <div
+          className={`transition-all duration-300 transform ${
+            isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 h-8"
+          }`}
         >
-          homecarre
-        </span>
+          <Image
+            priority={true}
+            src="/homecarre.svg"
+            width={100}
+            height={100}
+            alt="Logo"
+          />
+        </div>
+        <MenuOutlined
+          className={`text-xl cursor-pointer ${
+            isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          }`}
+          onClick={toggleSidebar}
+        />
       </div>
       <nav>
         <Menu
           mode="inline"
           theme="dark"
-          className={`transition-all duration-300 ${isOpen ? "w-64" : "w-16"}`}
+          className={`items-center transition-all duration-300 ${
+            isOpen ? "w-64" : "w-16"
+          }`}
           items={items}
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["/admin"]}
           selectedKeys={[pathname]}
+          onClick={(e) => router.push(e.key)}
         />
       </nav>
+      <div className="fixed bottom-2 mb-2 w-full bg-white">
+        <Button
+          type="link"
+          block
+          icon={<LogoutOutlined />}
+          className="rounded-none bg-gray-200 text-white"
+          onClick={handleLogout}
+        >
+          {isOpen ? "Log Out" : ""}
+        </Button>
+      </div>
     </div>
   );
 };
