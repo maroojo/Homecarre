@@ -1,20 +1,39 @@
 "use client";
 
 import React, { useState } from "react";
-import { Form, Input, Button, DatePicker } from "antd";
+import { Form, Input, Button, DatePicker, Select, Col, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
-const SearchTemp = ({ onSearch, pickDate = true }) => {
+const SearchTemp = ({
+  onSearch,
+  pickDate = true,
+  pickStatus = true,
+  statusOptions = [],
+}) => {
   const { RangePicker } = DatePicker;
+  const { Option } = Select;
 
   const [keyword, setKeyword] = useState("");
   const [date, setDate] = useState([]);
+  const [status, setStatus] = useState(["All"]);
 
-  const handleSearch = (keyword, date) => {
-    onSearch({ keyword, ...(pickDate && { date }) });
+  const handleSearch = () => {
+    const searchParams = { keyword };
+    if (pickDate) searchParams.date = date;
+    if (pickStatus && status.length && !status.includes("All"))
+      searchParams.status = status;
+    onSearch(searchParams);
   };
   const handleFocus = () => {
     setKeyword(null);
+  };
+
+  const handleStatusChange = (value) => {
+    if (value.includes("All")) {
+      setStatus(["All"]);
+    } else {
+      setStatus(value.filter((v) => v !== "All"));
+    }
   };
 
   const sqlInjection = (rule, value) => {
@@ -28,45 +47,75 @@ const SearchTemp = ({ onSearch, pickDate = true }) => {
   return (
     <Form
       onFinish={handleSearch}
-      className="flex flex-wrap items-end sm:gap-4 mb-4"
+      className="flex flex-wrap items-end mb-4"
       layout="vertical"
     >
-      <Form.Item
-        label="Search :"
-        name="search"
-        rules={[
-          {
-            validator: sqlInjection,
-          },
-        ]}
-        className="w-full sm:w-auto"
-      >
-        <Input
-          type="text"
-          placeholder="ID, name, property"
-          value={keyword}
-          onFocus={handleFocus}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-      </Form.Item>
-      {pickDate && (
-        <Form.Item label="Date :" name="date" className="w-3/4 sm:w-auto">
-          <RangePicker
-            value={date}
-            onChange={(value) => setDate(value)}
-            format="DD-MM-YYYY"
-            allowClear
-          />
-        </Form.Item>
-      )}
-      <Form.Item>
-        <Button
-          type="primary"
-          icon={<SearchOutlined />}
-          htmlType="submit"
-          className="ml-4 sm:ml-0"
-        ></Button>
-      </Form.Item>
+      <Row align={"bottom"}>
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Form.Item
+            label="Search :"
+            name="search"
+            rules={[
+              {
+                validator: sqlInjection,
+              },
+            ]}
+            className="w-full"
+          >
+            <Input
+              type="text"
+              placeholder="ID, name, property"
+              value={keyword}
+              onFocus={handleFocus}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+          </Form.Item>
+        </Col>
+        {pickDate && (
+          <Col xs={24} sm={12} md={8} lg={6}>
+            <Form.Item label="Date :" name="date" >
+              <RangePicker
+                value={date}
+                onChange={(value) => setDate(value)}
+                format="DD-MM-YYYY"
+                allowClear
+              />
+            </Form.Item>
+          </Col>
+        )}
+        {pickStatus && (
+          <Col xs={24} sm={12} md={8} lg={6}>
+            <Form.Item
+              label="Status :"
+              name="status"
+            >
+              <Select
+                allowClear
+                placeholder="Select status"
+                value={status}
+                onChange={handleStatusChange}
+              >
+                <Option value="All">All</Option>
+                {statusOptions.map((option) => (
+                  <Option key={option} value={option}>
+                    {option}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        )}
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Form.Item>
+            <Button
+              type="primary"
+              icon={<SearchOutlined />}
+              htmlType="submit"
+              className="ml-4"
+            ></Button>
+          </Form.Item>
+        </Col>
+      </Row>
     </Form>
   );
 };

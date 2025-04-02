@@ -7,6 +7,7 @@
       "@admin/*": ["src/components/pages/admin/*"],
       "@customer/*": ["src/components/pages/customer/*"],
       "@ui/*": ["src/components/ui/*"],
+      "@mock/*":["src/components/mock/*"]
     }
   }
 }

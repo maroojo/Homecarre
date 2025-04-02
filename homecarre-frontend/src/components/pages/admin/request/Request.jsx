@@ -1,54 +1,46 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { Row, Col, Tag, Button } from "antd";
+import { Row, Col, Tag } from "antd";
 
-import ContractsService from "@/services/admin/contractsService";
+import RepairService from "@/services/admin/repairService";
 
 import SearchTemp from "@ui/searchTemp";
 import TableTemp from "@ui/tableTemp";
+import ModalTemp from "@ui/modalTemp";
 import PaginationTemp from "@ui/paginationTemp";
 
-import { columns } from "@admin/adminColumns/homeColumn";
+import { columns } from "../adminColumns/requestColumn";
 
-const ModalTemp = dynamic(() => import("@ui/modalTemp"), { ssr: false });
-const Contract = dynamic(
-  () => import("@admin/contract/Contract"),
-  { ssr: false }
-);
+const Request = () => {
+  const { getRepairs } = RepairService();
 
-const Admin = () => {
-  const { getContracts, getContract } = ContractsService();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
-  const [selectedId, setSelectedId] = useState(null);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
-
-  const [detailOpen, setDetailOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  const callGetContract = async (searchParams, page = 1) => {
+  const callGetRepair = async (searchParams, page = 1) => {
     setLoading(true);
     try {
       let response;
       if (searchParams.keyword || searchParams.date) {
-        response = await getContract(
+        response = await getRepairs(
           searchParams.keyword,
           searchParams.date || [],
           page,
           pageSize
         );
       } else {
-        response = await getContracts(page, pageSize);
+        response = await getRepairs(page, pageSize);
       }
-
       if (response) {
         setData(response);
         setTotal(response.total || 0);
+        console.log(response);
       }
     } catch (error) {
       console.error("API error:", error);
@@ -57,29 +49,10 @@ const Admin = () => {
     }
   };
 
-  const handleDetail = (id) => {
-    setSelectedId(id);
-    setDetailOpen(true);
-  };
-  const handleCloseDetail = () => {
-    setDetailOpen(false);
-    setSelectedId(null);
-  };
-
   const handleSearch = (params) => {
     setSearchKey(params);
     setCurrentPage(1);
   };
-
-  const handleRow = (record) => ({
-    onClick: (e) => {
-      if (e.target.closest("button")) {
-        return;
-      }
-      handleDetail(record.hc_no);
-    },
-    className: "cursor-pointer",
-  });
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -87,9 +60,9 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    callGetContract(searchKey);
+    callGetRepair(searchKey);
   }, [searchKey]);
-
+  const tableData = data ? data.data : [];
   return (
     <div>
       <Row className="flex sm:justify-between items-end">
@@ -104,9 +77,8 @@ const Admin = () => {
       </Row>
       <TableTemp
         columns={columns}
-        data={data.data}
+        data={tableData}
         loading={loading}
-        onRow={handleRow}
         rowKey={(record) => record.hc_no}
       />
       <Row justify={"end"} className="my-10">
@@ -118,16 +90,7 @@ const Admin = () => {
           className="mt-4 text-center"
         />
       </Row>
-      <ModalTemp
-        visible={detailOpen}
-        onClose={handleCloseDetail}
-        width={"95%"}
-        maskClos={false}
-      >
-        <Contract id={selectedId} />
-      </ModalTemp>
     </div>
   );
 };
-
-export default Admin;
+export default Request;

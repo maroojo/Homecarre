@@ -1,5 +1,11 @@
+import { AuthProvider } from "@/context/AuthContext";
+
 const RootConfig = ({ children }) => {
-    return <>{children}</>;
-  };
-  
-  export default RootConfig;
+  return (  
+    <AuthProvider>
+      {children}
+    </AuthProvider>
+  );
+};
+
+export default RootConfig;

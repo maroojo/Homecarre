@@ -23,9 +23,11 @@ const ModalTemp = ({
   title,
   visible,
   onClose,
+  closable,
   iconModal,
-  width,
+  blurBackground,
   decorate,
+  width,
   children,
   footerButtons,
   maskClos,
@@ -48,13 +50,19 @@ const ModalTemp = ({
 
   return (
     <div>
+      {visible && blurBackground && (
+        <div className="fixed inset-0 bg-opacity-50 backdrop-blur-sm z-40"></div>
+      )}
       <Modal
         title={title}
         open={visible}
         onCancel={onClose}
+        closable={closable}
+        width={width}
         footer={null}
-        width={width || 320}
         maskClosable={maskClos}
+        centered
+        destroyOnClose
       >
         <div
           className={
@@ -67,11 +75,13 @@ const ModalTemp = ({
             src={iconModal}
             alt="Error"
             className={
-              iconModal ? "my-5 max-w-40 h-auto flex justify-center" : "hidden"
+              iconModal
+                ? "my-5 max-w-40 h-auto flex justify-center rounded-full"
+                : "hidden"
             }
             preview={false}
           />
-          <div className="text-pretty font-semibold text-xl">{children}</div>
+          <div className="font-semibold text-xl">{children}</div>
           <div className="flex justify-end gap-4 my-5">
             {footerButtons?.[0] && (
               <div className="py-1 text-primary rounded-full border-primary border-2 cursor-pointer bg-white hover:transform hover:scale-101 hover:ease-in-out">

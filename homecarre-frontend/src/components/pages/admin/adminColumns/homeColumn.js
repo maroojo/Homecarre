@@ -1,11 +1,11 @@
-import { Tooltip, Button } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import {  Button } from "antd";
+import { MoreOutlined, EditOutlined } from "@ant-design/icons";
 
 export const columns = [
   {
     title: "HC No.",
-    dataIndex: "id",
-    key: "id",
+    dataIndex: "hc_no",
+    key: "hc_no",
     className: "w-24",
     render: (text) => (
       <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
@@ -13,87 +13,72 @@ export const columns = [
   },
   {
     title: "Address",
-    dataIndex: "address",
     key: "address",
     className: "w-32 md:w-64",
-    sorter: (a, b) => a.address.localeCompare(b.address),
-    render: (text) => (
-      <Tooltip
-        title={text}
-        Style={{
-          maxWidth: "400px",
-          maxHeight: "8em",
-          lineHeight: "1.5em",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        }}
-        autoAdjustOverflow={true}
-      >
-        <div className="line-clamp-3 h-[3rem] text-left">{text}</div>
-      </Tooltip>
-    ),
+    render: (_, record) => {
+      return (
+        <div className="flex flex-col text-xs">
+          {record.property_name && (
+            <div className="font-bold">{record.property_name}</div>
+          )}
+          {record.property_detail && <div>{record.property_detail}</div>}
+        </div>
+      );
+    },
   },
   {
     title: "Owner",
-    dataIndex: "owner",
+    dataIndex: "owner_name",
     key: "owner",
     className: "w-16 md:w-32",
-    sorter: (a, b) => a.owner.localeCompare(b.owner),
     render: (text) => (
       <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
     ),
   },
   {
     title: "Tenant",
-    dataIndex: "tenant",
+    dataIndex: "tenant_name",
     key: "tenant",
     className: "w-16 md:w-32",
-    sorter: (a, b) => a.tenant.localeCompare(b.tenant),
     render: (text) => (
       <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
     ),
   },
   {
     title: "เรื่มสัญญา",
-    dataIndex: "contractStart",
+    dataIndex: "date_start",
     key: "contractStart",
     className: "w-28",
-    sorter: (a, b) =>
-      new Date(a.contractStart.split(" / ").reverse().join("-")) -
-      new Date(b.contractStart.split(" / ").reverse().join("-")),
     render: (text) => (
       <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
     ),
   },
   {
     title: "สิ้นสุดสัญญา",
-    dataIndex: "contractEnd",
+    dataIndex: "date_end",
     key: "contractEnd",
     className: "w-28",
-    sorter: (a, b) =>
-      new Date(a.contractEnd.split(" / ").reverse().join("-")) -
-      new Date(b.contractEnd.split(" / ").reverse().join("-")),
     render: (text) => (
       <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
     ),
   },
   {
     title: "ค่าเช่า",
-    dataIndex: "rent",
+    dataIndex: "rent_price",
     key: "rent",
     className: "w-20",
     sorter: (a, b) => a.rent - b.rent,
     render: (value) => (
       <div className="line-clamp-1 h-[3rem] text-left">
-        {value.toLocaleString("en-US", {
-          maximumFractionDigits: 2,
-        })}
+        {typeof value === "number" || !isNaN(value)
+          ? Number(value).toLocaleString("en-US", { minimumFractionDigits: 2 })
+          : "N/A"}
       </div>
     ),
   },
   {
     title: "Status",
-    dataIndex: "status",
+    dataIndex: "hc_status",
     key: "status",
     className: "w-12",
     render: (text) => (

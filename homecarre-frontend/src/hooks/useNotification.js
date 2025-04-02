@@ -1,12 +1,10 @@
-import { App } from 'antd';
+import { notification } from "antd";
 
 const useNotification = () => {
-  const { notification } = App.useApp();
-
   const info = ({ message, onClose }) => {
-    notification.destroy();
+    // notification.close();
     notification.info({
-      message: 'Info',
+      message: "Info",
       description: message,
       pauseOnHover: true,
       onClose: onClose,
@@ -14,9 +12,9 @@ const useNotification = () => {
   };
 
   const warning = ({ message, onClose }) => {
-    notification.destroy();
+    // notification.close();
     notification.warning({
-      message: 'Warning',
+      message: "Warning",
       description: message,
       pauseOnHover: true,
       onClose: onClose,
@@ -24,9 +22,9 @@ const useNotification = () => {
   };
 
   const success = ({ message, onClose }) => {
-    notification.destroy();
+    // notification.close();
     notification.success({
-      message: 'Success',
+      message: "Success",
       description: message,
       pauseOnHover: true,
       onClose: onClose,
@@ -36,7 +34,7 @@ const useNotification = () => {
   const error = ({ message, onClose }) => {
     notification.destroy();
     notification.error({
-      message: 'Error',
+      message: "Error",
       description: message,
       pauseOnHover: true,
       onClose: onClose,

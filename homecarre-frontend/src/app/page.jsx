@@ -1,9 +1,12 @@
-import Home from '@/components/pages/customer/home/Home';
+import React from 'react';
+import Admin from '@admin/Admin';
 
-export default function Page() {
-  return (
-    <div >  
-      Page
-    </div>
-  );
-}
+const AdminPage = () => {
+    return (
+        <div>
+            <Admin />
+        </div>
+    );
+};
+
+export default AdminPage;

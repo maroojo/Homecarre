@@ -3,22 +3,17 @@
 import React from "react";
 import { Table } from "antd";
 
-const TableTemp = ({
-  columns,
-  data,
-  loading = false,
-  pagination = true,
-  onRow,
-}) => {
+const TableTemp = ({ columns, data, loading = false, onRow, rowKey }) => {
   return (
     <Table
       columns={columns}
       dataSource={data}
       loading={loading}
-      pagination={pagination}
+      pagination={false}
       onRow={onRow}
-      rowKey={(record) => record.id || record.key}
+      rowKey={rowKey}
       scroll={{ x: "max-content" }}
+      align="top"
     />
   );
 };
