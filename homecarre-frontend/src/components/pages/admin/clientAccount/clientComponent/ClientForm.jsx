@@ -72,7 +72,7 @@ const ClientForm = ({ id, onClose }) => {
               name="client_type"
               rules={[{ required: true, message: "Please select client type" }]}
             >
-              <Select  placeholder="Select">
+              <Select style={{ textAlign: "left" }}  placeholder="Select">
                 <Select.Option value="tenant">Tenant</Select.Option>
                 <Select.Option value="owner">Owner</Select.Option>
               </Select>
