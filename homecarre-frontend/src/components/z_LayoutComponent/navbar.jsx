@@ -25,6 +25,9 @@ const Navbar = ({  isOpen }) => {
         </div>
       </div>
       <div>
+
+      </div>
+      <div>
         <span className="text-lg font-semibold">Admin</span>
       </div>
     </div>

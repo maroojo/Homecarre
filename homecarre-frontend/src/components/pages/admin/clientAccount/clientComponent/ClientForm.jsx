@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Input, Card, Button, Modal } from "antd";
+import { Row, Col, Form, Input, Card, Button, Modal, Select } from "antd";
 import ClientService from "@/services/admin/clientService";
 import useNotification from "@/hooks/useNotification";
 
@@ -70,9 +70,12 @@ const ClientForm = ({ id, onClose }) => {
             <Form.Item
               label="Client Type"
               name="client_type"
-              rules={[{ required: true, message: "Please enter client type" }]}
+              rules={[{ required: true, message: "Please select client type" }]}
             >
-              <Input />
+              <Select>
+                <Select.Option value="tenant">Tenant</Select.Option>
+                <Select.Option value="owner">Owner</Select.Option>
+              </Select>
             </Form.Item>
           </Col>
           <Col span={24}>

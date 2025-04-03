@@ -17,11 +17,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const cookies = parseCookies();
     const token = cookies.token;
-    console.log("token in context",token)
 
     if (token) {
       checkUser(token).then((response) => {
-        console.log("Check User Response:", response)
         if (response) {
           setIsAuthenticated(true);
           setUser(response.result);
