@@ -18,7 +18,7 @@ const LoginModal = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await islogin(values.username, values.password);
+      const response = await islogin(values.username, values.password, login);
 
       if (response) {
         login(response.token);
@@ -72,7 +72,6 @@ const LoginModal = () => {
               variant="solid"
               htmlType="submit"
               loading={loading}
-              setLoading={setLoading}
               className="mt-8"
             >
               <div>Login</div>

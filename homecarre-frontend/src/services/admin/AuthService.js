@@ -1,19 +1,28 @@
 import useApi from "@/hooks/useApi";
-import { useAuth } from "@/context/AuthContext";
+import { parseCookies, destroyCookie } from "nookies";
 
 const AdminService = () => {
   const endpoint = process.env.NEXT_PUBLIC_API_URL;
   const { api } = useApi();
-  const { login, logout } = useAuth();
 
-  const islogin = async (user, password) => {
+  const islogin = async (user, password, login) => {
     try {
-      const response = await api(`https://accomasia.co.th/homecare/adminlogin`, "POST", {
-        user,
-        password,
-      });
+      const response = await api(
+        `https://accomasia.co.th/homecare/adminlogin`,
+        "POST",
+        {
+          user,
+          password,
+        }
+      );
       if (response) {
-        login(response.token, response.user_id, response.user_name, response.user_fullname, response.user_auth);
+        login(
+          response.token,
+          response.user_id,
+          response.user_name,
+          response.user_fullname,
+          response.user_auth
+        );
       }
       console.log("login ", response);
       return response;
@@ -25,7 +34,17 @@ const AdminService = () => {
 
   const islogout = async () => {
     try {
-      const response = await api(`https://accomasia.co.th/homecare/adminlogout`, "POST");
+      const cookies = parseCookies();
+      const token = cookies.token;
+      console.log("toekn", token);
+      const response = await api(
+        `https://accomasia.co.th/homecare/logout`,
+        "GET",
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      console.log("Logout response:", response);
       if (response) {
         logout();
       }
@@ -41,7 +60,12 @@ const AdminService = () => {
       const response = await api(
         `${endpoint}/admin/checkuser`,
         "POST",
-        { user_id }
+        {
+          user_id,
+        },
+        {
+          Authorization: `Bearer ${token}`,  
+        }
       );
       return response;
     } catch (error) {

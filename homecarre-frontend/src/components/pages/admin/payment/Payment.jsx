@@ -12,7 +12,10 @@ import { columns } from "../adminColumns/paymentColumn";
 
 import PaymentService from "@/services/admin/paymentService";
 
+import { useAuth } from "@/context/AuthContext";
+
 const Payment = () => {
+  const { user } = useAuth();
   const { getPayment } = PaymentService();
   const date = dayjs();
   const month = date.format("MMM");
@@ -75,7 +78,9 @@ const Payment = () => {
           </Col>
         </Col>
         <Col>
-          <Button color="cyan" variant="solid">create for {month}</Button>
+          <Button color="cyan" variant="solid">
+            create for {month}
+          </Button>
         </Col>
       </Row>
       <TableTemp

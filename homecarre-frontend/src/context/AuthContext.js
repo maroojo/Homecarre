@@ -1,4 +1,3 @@
-// context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import LoginModal from "@admin/_modals/LoginModal";
@@ -9,6 +8,7 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const { checkUser } = AdminService();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,10 +17,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const cookies = parseCookies();
     const token = cookies.token;
+    console.log("token in context",token)
 
     if (token) {
-      AdminService.checkUser(token).then((response) => {
-        if (response.isSuccess) {
+      checkUser(token).then((response) => {
+        console.log("Check User Response:", response)
+        if (response) {
           setIsAuthenticated(true);
           setUser(response.result);
         } else {
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     setLoading(false);
-  }, []);
+  }, [checkUser]);
 
   const login = (token, user_id, user_name, user_fullname, user_auth) => {
     setCookie(null, "token", token, { path: "/" });
