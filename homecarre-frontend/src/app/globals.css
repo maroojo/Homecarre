@@ -10,7 +10,17 @@
 }
 
 .ant-menu-item:hover {
-  background-color: #ff5733 !important;
+  background-color: #97a6b8 !important;
+  color: white !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #9e9e9e !important;
+  color: white !important;
+}
+
+.ant-menu-item-selected:hover {
+  background-color: #696969 !important;
   color: white !important;
 }
 

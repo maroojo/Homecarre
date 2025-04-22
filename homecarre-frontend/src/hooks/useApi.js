@@ -1,4 +1,4 @@
-import axiosInstance from "@/shared/config/axios.config";
+import axiosInstance from "@/lib/config/axios.config";
 import { AxiosError } from "axios";
 
 const useApi = () => {
@@ -14,18 +14,13 @@ const useApi = () => {
       });
       return response.data;
     } catch (err) {
-      if (err instanceof AxiosError) {
-        const message =
-          err.response?.data?.message || err.message || "An error occurred";
-        const status = err.response?.status || "Unknown status";
-
-        console.log(`Error Status: ${status}`);
-
-        return null;
+      if (
+        error?.response?.status === 401 ||
+        error?.response?.data?.message === "Session expired"
+      ) {
+        window.dispatchEvent(new CustomEvent("session-expired"));
       }
-
-      console.error("An unexpected error occurred");
-      return null;
+      throw error;
     }
   };
 

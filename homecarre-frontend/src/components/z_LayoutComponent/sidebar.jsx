@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggleSidebar, onPathChange }) => {
   const router = useRouter();
   const pathname = usePathname() || "/";
   const { islogout } = AdminService();
@@ -23,35 +23,79 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const items = [
     {
       key: "/",
-      icon: <HomeOutlined />,
+      icon: (
+        <Image
+          src="house-solid.svg"
+          className="w-5 h-5"
+          alt="Home"
+          width={24}
+          height={24}
+        />
+      ),
       label: isOpen ? "Homecarre" : <HomeOutlined />,
-      onClick: () => router.push("/"),
+      onClick: () => {
+        router.push("/");
+        onPathChange("home");
+      },
     },
     {
       key: "/request",
-      icon: <DesktopOutlined />,
+      icon: (
+        <Image
+          src="screwdriver-wrench-solid.svg"
+          className="w-5 h-5"
+          alt="Home"
+          width={24}
+          height={24}
+        />
+      ),
       label: isOpen ? "Repair Request" : <DesktopOutlined />,
-      onClick: () => router.push("/request"),
+      onClick: () => {
+        router.push("/request");
+        onPathChange("request");
+      },
     },
     {
       key: "/payment",
-      icon: <ContainerOutlined />,
+      icon: (
+        <Image
+          src="money-bill-transfer-solid.svg"
+          className="w-5 h-5"
+          alt="Home"
+          width={24}
+          height={24}
+        />
+      ),
       label: isOpen ? "Payment" : <ContainerOutlined />,
-      onClick: () => router.push("/payment"),
+      onClick: () => {
+        router.push("/payment");
+        onPathChange("payment");
+      },
     },
     {
       key: "/client",
-      icon: <UserOutlined />,
+      icon: (
+        <Image
+          src="user-solid.svg"
+          className="w-5 h-5"
+          alt="Home"
+          width={24}
+          height={24}
+        />
+      ),
       label: isOpen ? "Client Account" : <UserOutlined />,
-      onClick: () => router.push("/client"),
+      onClick: () => {
+        router.push("/client");
+        onPathChange("client");
+      },
     },
   ];
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
       const response = await islogout();
       if (response) {
-        router.push("/"); 
+        router.push("/");
       } else {
         console.error("Logout failed:", response);
       }
@@ -64,7 +108,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     <div className="w-full">
       <div className="p-2 flex justify-between items-center text-white">
         <div
-          className={`transition-all duration-500 transform h-9 ${
+          className={`transition-all duration-100 transform h-9 ${
             isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
           }`}
         >
@@ -77,15 +121,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           />
         </div>
         <MenuOutlined
-          className="text-xl cursor-pointer"
+          className={`text-xl cursor-pointer transition-all duration-100 transform ${
+            isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          }`}
           onClick={toggleSidebar}
         />
       </div>
 
-      <nav>
+      <nav className="mt-1">
         <Menu
           mode="inline"
-          theme="dark"
           className={`transition-all duration-500 ${isOpen ? "w-64" : "w-16"}`}
           items={items}
           defaultSelectedKeys={["/"]}
@@ -93,7 +138,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         />
       </nav>
 
-      <div className="fixed bottom-2 mb-2 w-full bg-white">
+      <div className={`fixed bottom-2 mb-2 bg-white w-full rounded-full`}>
         <Button
           type="link"
           block

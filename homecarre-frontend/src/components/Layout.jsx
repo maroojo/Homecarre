@@ -4,15 +4,13 @@ import React, { useState } from "react";
 import { Row, Col } from "antd";
 
 import RootConfig from "./RootConfig";
-import { useAuth } from "@/context/AuthContext";
 
 import Navbar from "./z_LayoutComponent/navbar";
 import Sidebar from "./z_LayoutComponent/sidebar";
-import LoginModal from "@admin/_modals/LoginModal";
 
 const Layout = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [currentPath, setCurrentPath] = useState("/");
 
   return (
     <RootConfig>
@@ -24,6 +22,7 @@ const Layout = ({ children }) => {
           <Sidebar
             toggleSidebar={() => setIsOpen(!isOpen)}
             isOpen={isOpen}
+            onPathChange={setCurrentPath}
           />
         </Col>
         <Col
@@ -31,9 +30,12 @@ const Layout = ({ children }) => {
           className={`transition-all duration-300 ease-in-out flex flex-col w-full h-screen`}
         >
           <div className="h-12 w-full">
-            <Navbar isOpen={isOpen} />
+            <Navbar isOpen={isOpen} toggleSidebar={() => setIsOpen(!isOpen)} />
           </div>
           <div className="m-5 mb-10 h-[calc(100vh-88px)] overflow-y-auto no-scrollbar">
+            <div className="my-3 ml-5 text-2xl font-semibold ">
+              {currentPath}
+            </div>
             {children}
           </div>
         </Col>

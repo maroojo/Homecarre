@@ -1,11 +1,11 @@
 import useApi from "@/hooks/useApi";
-import { parseCookies, destroyCookie } from "nookies";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
 
-const AdminService = () => {
+const AdminService = (loginCallback, logoutCallback) => {
   const endpoint = process.env.NEXT_PUBLIC_API_URL;
   const { api } = useApi();
 
-  const islogin = async (user, password, login) => {
+  const Login = async (user, password) => {
     try {
       const response = await api(
         `https://accomasia.co.th/homecare/adminlogin`,
@@ -16,7 +16,8 @@ const AdminService = () => {
         }
       );
       if (response) {
-        login(
+        setCookie(null, "user_id", response.user_id, { path: "/" });
+        loginCallback(
           response.token,
           response.user_id,
           response.user_name,
@@ -32,21 +33,17 @@ const AdminService = () => {
     }
   };
 
-  const islogout = async () => {
+  const Logout = async () => {
     try {
-      const cookies = parseCookies();
-      const token = cookies.token;
-      console.log("toekn", token);
       const response = await api(
         `https://accomasia.co.th/homecare/logout`,
-        "GET",
-        {
-          Authorization: `Bearer ${token}`,
-        }
+        "GET"
       );
       console.log("Logout response:", response);
       if (response) {
-        logout();
+        destroyCookie(null, "user_id");
+        destroyCookie(null, "laravel_session");
+        logoutCallback();
       }
       return response;
     } catch (error) {
@@ -57,16 +54,9 @@ const AdminService = () => {
 
   const checkUser = async (user_id) => {
     try {
-      const response = await api(
-        `${endpoint}/admin/checkuser`,
-        "POST",
-        {
-          user_id,
-        },
-        {
-          Authorization: `Bearer ${token}`,  
-        }
-      );
+      const response = await api(`${endpoint}/admin/checkuser`, "POST", {
+        user_id,
+      });
       return response;
     } catch (error) {
       console.error("Check User error:", error);
@@ -74,7 +64,7 @@ const AdminService = () => {
     }
   };
 
-  return { islogin, islogout, checkUser };
+  return { Login, Logout, checkUser };
 };
 
 export default AdminService;

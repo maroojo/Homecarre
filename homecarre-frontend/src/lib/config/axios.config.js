@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-const api = axios.create({
+const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
+    // withCredentials: true, 
 });
 
-api.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     (config) => config,
     (error) => Promise.reject(error)
 );
 
-export default api;
+export default axiosInstance;

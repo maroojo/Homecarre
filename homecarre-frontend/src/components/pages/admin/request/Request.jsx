@@ -62,7 +62,9 @@ const Request = () => {
   useEffect(() => {
     callGetRepair(searchKey);
   }, [searchKey]);
+
   const tableData = data ? data.data : [];
+  
   return (
     <div>
       <Row className="flex sm:justify-between items-end">

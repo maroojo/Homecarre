@@ -9,8 +9,7 @@ import ModalTemp from "@ui/modalTemp";
 
 const LoginModal = () => {
   const [form] = Form.useForm();
-  const { login } = useAuth();
-  const { islogin } = AdminService();
+  const { Login } = useAuth();
   const { success, warning } = useNotification();
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -18,21 +17,17 @@ const LoginModal = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await islogin(values.username, values.password, login);
+      const response = await Login(values.username, values.password);
 
       if (response) {
-        login(response.token);
         setIsOpen(false);
       } else {
-        console.error("Login failed:", response.message);
+        warning({ message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
       }
     } catch (error) {
       console.error("Login error:", error);
       warning({
         message: "login ผิดพลาดกรุณาลองใหม่",
-        onClose: () => {
-          console.log("Success notification closed");
-        },
       });
     } finally {
       setLoading(false);

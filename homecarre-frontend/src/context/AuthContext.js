@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies, destroyCookie } from "nookies";
 import LoginModal from "@admin/_modals/LoginModal";
 import AdminService from "@/services/admin/AuthService";
 
@@ -8,23 +8,42 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const { checkUser } = AdminService();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+
+  const login = (token, user_id, user_name, user_fullname, user_auth) => {
+    setUser({ user_id, user_name, user_fullname, user_auth });
+    setIsAuthenticated(true);
+    setIsModalOpen(false);
+  };
+
+  const logout = () => {
+    destroyCookie(null, "user_id");
+    destroyCookie(null, "laravel_session");
+    setUser(null);
+    setIsAuthenticated(false);
+    setIsModalOpen(true);
+  };
+  const {
+    Login: loginService,
+    Logout: logoutService,
+    checkUser,
+  } = AdminService(login, logout);
 
   useEffect(() => {
     const cookies = parseCookies();
-    const token = cookies.token;
+    const id = cookies.user_id;
 
-    if (token) {
-      checkUser(token).then((response) => {
-        if (response) {
+    if (id) {
+      checkUser(id).then((res) => {
+        if (res) {
           setIsAuthenticated(true);
-          setUser(response.result);
+          setUser(res.result);
         } else {
           setIsAuthenticated(false);
+          setIsModalOpen(true);
         }
         setLoading(false);
       });
@@ -32,27 +51,28 @@ export const AuthProvider = ({ children }) => {
       setIsModalOpen(true);
       setLoading(false);
     }
+  }, []);
 
-    setLoading(false);
-  }, [checkUser]);
-
-  const login = (token, user_id, user_name, user_fullname, user_auth) => {
-    setCookie(null, "token", token, { path: "/" });
-    setUser({ user_id, user_name, user_fullname, user_auth });
-    setIsAuthenticated(true);
-    setIsModalOpen(false);
-  };
-
-  const logout = () => {
-    destroyCookie(null, "token");
-    setUser(null);
-    setIsAuthenticated(false);
-    setIsModalOpen(true);
-  };
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsModalOpen(true);
+    };
+  
+    window.addEventListener("session-expired", handleSessionExpired);
+    return () => window.removeEventListener("session-expired", handleSessionExpired);
+  }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, loading, user }}
+      value={{
+        isAuthenticated,
+        Login: loginService,
+        Logout: logoutService,
+        loading,
+        user,
+      }}
     >
       {children}
       {isModalOpen && <LoginModal />}
