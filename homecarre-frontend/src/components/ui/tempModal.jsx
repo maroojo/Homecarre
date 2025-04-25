@@ -19,7 +19,7 @@ import { Modal, Image } from "antd";
 //   </ModalTemplate>
 // );
 
-const ModalTemp = ({
+const TempModal = ({
   title,
   visible,
   onClose,
@@ -100,4 +100,4 @@ const ModalTemp = ({
   );
 };
 
-export default ModalTemp;
+export default TempModal;

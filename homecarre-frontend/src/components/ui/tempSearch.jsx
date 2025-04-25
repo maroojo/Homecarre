@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, DatePicker, Select, Col, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
-const SearchTemp = ({
+const TempSearch = ({
   onSearch,
   pickDate = true,
   pickStatus = true,
@@ -120,4 +120,4 @@ const SearchTemp = ({
   );
 };
 
-export default SearchTemp;
+export default TempSearch;

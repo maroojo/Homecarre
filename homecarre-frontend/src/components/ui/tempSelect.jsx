@@ -3,7 +3,7 @@ import { Select } from "antd";
 
 const { Option } = Select;
 
-const SelectTemp = ({ options, selectedValue, onSelect, placeholder }) => {
+const TempSelect = ({ options, selectedValue, onSelect, placeholder }) => {
   return (
     <Select
       value={selectedValue}
@@ -20,4 +20,4 @@ const SelectTemp = ({ options, selectedValue, onSelect, placeholder }) => {
   );
 };
 
-export default SelectTemp;
+export default TempSelect;

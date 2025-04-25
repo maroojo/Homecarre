@@ -4,6 +4,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@pages/*": ["src/components/pages/*"],
+      "@components/*": ["src/components/*"],
       "@admin/*": ["src/components/pages/admin/*"],
       "@customer/*": ["src/components/pages/customer/*"],
       "@ui/*": ["src/components/ui/*"],

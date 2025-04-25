@@ -1,0 +1,14 @@
+.square-btn {
+  background-color: #f3f3f3 !important;
+  color: #d40074 !important;
+  border-radius: 0px !important;
+  font-weight: 500;
+  width: "100%";
+}
+.square-btn:hover {
+  background-color: #d40074 !important;
+  color: #f3f3f3 !important;
+  border-radius: 0px !important;
+  font-weight: 500;
+  width: "100%";
+}

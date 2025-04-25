@@ -1,16 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Row, Col, Tag } from "antd";
 
 import RepairService from "@/services/admin/repairService";
 
-import SearchTemp from "@ui/searchTemp";
-import TableTemp from "@ui/tableTemp";
-import ModalTemp from "@ui/modalTemp";
-import PaginationTemp from "@ui/paginationTemp";
+import { LTable, TSearch, TTable, TPagination } from "@components/ui";
 
-import { columns } from "../adminColumns/requestColumn";
+import { columns } from "../_columns/requestColumn";
 
 const Request = () => {
   const { getRepairs } = RepairService();
@@ -64,34 +60,29 @@ const Request = () => {
   }, [searchKey]);
 
   const tableData = data ? data.data : [];
-  
+
   return (
     <div>
-      <Row className="flex sm:justify-between items-end">
-        <Col span={20}>
-          <Col span={24}>
-            <SearchTemp onSearch={handleSearch} />
-          </Col>
-          <Col span={12}>
-            <Tag>{`total : ${data?.total ?? "N/A"}`}</Tag>
-          </Col>
-        </Col>
-      </Row>
-      <TableTemp
-        columns={columns}
-        data={tableData}
-        loading={loading}
-        rowKey={(record) => record.hc_no}
-      />
-      <Row justify={"end"} className="my-10">
-        <PaginationTemp
-          default={currentPage}
-          pageSize={pageSize}
-          total={total}
-          onChange={handlePageChange}
-          className="mt-4 text-center"
+      <LTable
+        onSearch={<TSearch onSearch={handleSearch} />}
+        total={data?.total ?? "N/A"}
+        pagination={
+          <TPagination
+            default={currentPage}
+            pageSize={pageSize}
+            total={total}
+            onChange={handlePageChange}
+            className="mt-4 text-center"
+          />
+        }
+      >
+        <TTable
+          columns={columns}
+          data={tableData}
+          loading={loading}
+          rowKey={(record) => record.request_no}
         />
-      </Row>
+      </LTable>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { parseCookies, destroyCookie } from "nookies";
-import LoginModal from "@admin/_modals/LoginModal";
+import LoginModal from "@pages/_modals/LoginModal";
 import AdminService from "@/services/admin/AuthService";
 
 const AuthContext = createContext();

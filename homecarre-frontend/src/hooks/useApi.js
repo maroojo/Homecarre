@@ -15,12 +15,12 @@ const useApi = () => {
       return response.data;
     } catch (err) {
       if (
-        error?.response?.status === 401 ||
-        error?.response?.data?.message === "Session expired"
+        err?.response?.status === 401 ||
+        err?.response?.data?.message === "Session expired"
       ) {
         window.dispatchEvent(new CustomEvent("session-expired"));
       }
-      throw error;
+      throw err;
     }
   };
 

@@ -3,7 +3,7 @@
 import React from "react";
 import { Table } from "antd";
 
-const TableTemp = ({ columns, data, loading = false, onRow, rowKey }) => {
+const TempTable = ({ columns, data, loading = false, onRow, rowKey }) => {
   return (
     <Table
       columns={columns}
@@ -18,4 +18,4 @@ const TableTemp = ({ columns, data, loading = false, onRow, rowKey }) => {
   );
 };
 
-export default TableTemp;
+export default TempTable;
