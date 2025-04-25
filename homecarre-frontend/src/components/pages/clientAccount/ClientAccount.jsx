@@ -2,20 +2,25 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { Row, Col, Tag, Button } from "antd";
-import { columns } from "@admin/adminColumns/clientColumn";
-import SearchTemp from "@ui/searchTemp";
-import TableTemp from "@ui/tableTemp";
+import { Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
+import { columns } from "@/components/pages/_columns/clientColumn";
 
 import ClientService from "@/services/admin/clientService";
-import PaginationTemp from "@/components/ui/paginationTemp";
-const ModalTemp = dynamic(() => import("@ui/modalTemp"), {
-  ssr: false,
-});
-const ClientForm = dynamic(
-  () => import("@admin/clientAccount/clientComponent/ClientForm"),
+
+import { LTable, TSearch, TTable, TPagination } from "@components/ui";
+
+//#region lazy load
+const TModal = dynamic(
+  () => import("@components/ui").then((mod) => mod.TModal),
   { ssr: false }
 );
+const ClientForm = dynamic(
+  () => import("@/components/pages/clientAccount/clientComponent/ClientForm"),
+  { ssr: false }
+);
+//#endregion lazy load
 
 const ClientAccount = () => {
   const { getClients, getClient } = ClientService();
@@ -91,44 +96,47 @@ const ClientAccount = () => {
 
   return (
     <div>
-      <Row gutter={[16, 24]} align={"bottom"}>
-        <Col span={20}>
-          <Col span={24}>
-            <SearchTemp onSearch={handleSearch} />
-          </Col>
-          <Col span={12}>
-            <Tag>{`total : ${data?.total ?? "N/A"}`}</Tag>
-          </Col>
-        </Col>
-        <Col span={3} className="mr-3 text-right">
-          <Button onClick={() => handleOpenModal(null)}>add</Button>
-        </Col>
-      </Row>
-      <TableTemp
-        columns={columns(handleOpenModal)}
-        data={data.data}
-        loading={loading}
-        rowKey={(record) => record.client_code}
-      />
-      <Row justify={"end"} className="my-10">
-        <PaginationTemp
-          default={currentPage}
-          pageSize={pageSize}
-          total={total}
-          onChange={handlePageChange}
-          className="mt-4 text-center"
-        />
-      </Row>
-      <ModalTemp
-        visible={modalOpen}
-        onClose={handleCloseModal}
-        width={"40%"}
-        maskClos={false}
+      <LTable
+        onSearch={<TSearch onSearch={handleSearch} />}
+        total={data?.total ?? "N/A"}
+        rightButton={
+          <Button onClick={() => handleOpenModal(null)}>
+            <PlusOutlined />
+            add
+          </Button>
+        }
+        pagination={
+          <TPagination
+            default={currentPage}
+            pageSize={pageSize}
+            total={total}
+            onChange={handlePageChange}
+            className="mt-4 text-center"
+          />
+        }
+        modal={
+          <TModal
+            visible={modalOpen}
+            onClose={handleCloseModal}
+            width={"40%"}
+            maskClos={false}
+          >
+            <div className="mx-24 ">
+              <ClientForm
+                id={selectedRecord}
+                onClose={() => setModalOpen(false)}
+              />
+            </div>
+          </TModal>
+        }
       >
-        <div className="mx-24 ">
-          <ClientForm id={selectedRecord} onClose={() => setModalOpen(false)} />
-        </div>
-      </ModalTemp>
+        <TTable
+          columns={columns(handleOpenModal)}
+          data={data.data}
+          loading={loading}
+          rowKey={(record) => record.client_code}
+        />
+      </LTable>
     </div>
   );
 };

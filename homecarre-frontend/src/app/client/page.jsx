@@ -1,5 +1,5 @@
 import React from "react";
-import ClientAccount from "@admin/clientAccount/ClientAccount";
+import ClientAccount from "@pages/clientAccount/ClientAccount";
 
 const ClientPage = () => {
   return (

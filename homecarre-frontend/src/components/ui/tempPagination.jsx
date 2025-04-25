@@ -1,7 +1,7 @@
 import React from "react";
 import { Pagination } from "antd";
 
-const PaginationTemp = ({
+const TempPagination = ({
   default: defaultPage,
   pageSize,
   total,
@@ -22,4 +22,4 @@ const PaginationTemp = ({
   );
 };
 
-export default PaginationTemp;
+export default TempPagination;

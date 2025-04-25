@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import AdminService from "@/services/admin/AuthService";
 import useNotification from "@/hooks/useNotification";
 
-import ModalTemp from "@ui/modalTemp";
+import ModalTemp from "@/components/ui/tempModal";
 
 const LoginModal = () => {
   const [form] = Form.useForm();
@@ -40,7 +40,7 @@ const LoginModal = () => {
       onClose={null}
       maskClos={false}
       closable={false}
-      iconModal={`/icon.svg`}
+      iconModal={`/icon.png`}
       blurBackground={true}
     >
       <div className="w-full max-w-64">

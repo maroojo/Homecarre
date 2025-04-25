@@ -2,21 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Row, Col, Tag, Button } from "antd";
+import { Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 import ContractsService from "@/services/admin/contractsService";
 
-import SearchTemp from "@ui/searchTemp";
-import TableTemp from "@ui/tableTemp";
-import PaginationTemp from "@ui/paginationTemp";
+import { LTable, TSearch, TTable, TPagination } from "@components/ui";
 
-import { columns } from "@admin/adminColumns/homeColumn";
+import { columns } from "@pages/_columns/homeColumn";
 
-const ModalTemp = dynamic(() => import("@ui/modalTemp"), { ssr: false });
-const Contract = dynamic(
-  () => import("@admin/contract/Contract"),
+//#region lazy load
+const TModal = dynamic(
+  () => import("@components/ui").then((mod) => mod.TModal),
   { ssr: false }
 );
+const Contract = dynamic(() => import("@pages/contract/Contract"), {
+  ssr: false,
+});
+//#endregion lazy load
 
 const Admin = () => {
   const { getContracts, getContract } = ContractsService();
@@ -92,40 +95,42 @@ const Admin = () => {
 
   return (
     <div>
-      <Row className="flex sm:justify-between items-end">
-        <Col span={20}>
-          <Col span={24}>
-            <SearchTemp onSearch={handleSearch} />
-          </Col>
-          <Col span={12}>
-            <Tag>{`total : ${data?.total ?? "N/A"}`}</Tag>
-          </Col>
-        </Col>
-      </Row>
-      <TableTemp
-        columns={columns}
-        data={data.data}
-        loading={loading}
-        onRow={handleRow}
-        rowKey={(record) => record.hc_no}
-      />
-      <Row justify={"end"} className="my-10">
-        <PaginationTemp
-          default={currentPage}
-          pageSize={pageSize}
-          total={total}
-          onChange={handlePageChange}
-          className="mt-4 text-center"
-        />
-      </Row>
-      <ModalTemp
-        visible={detailOpen}
-        onClose={handleCloseDetail}
-        width={"95%"}
-        maskClos={false}
+      <LTable
+        onSearch={<TSearch onSearch={handleSearch} />}
+        total={data?.total ?? "N/A"}
+        rightButton={
+          <Button onClick={() => console.log("create ")}>
+            <PlusOutlined /> add
+          </Button>
+        }
+        pagination={
+          <TPagination
+            default={currentPage}
+            pageSize={pageSize}
+            total={total}
+            onChange={handlePageChange}
+            className="mt-4 text-center"
+          />
+        }
+        modal={
+          <TModal
+            visible={detailOpen}
+            onClose={handleCloseDetail}
+            width={"95%"}
+            maskClos={false}
+          >
+            <Contract id={selectedId} />
+          </TModal>
+        }
       >
-        <Contract id={selectedId} />
-      </ModalTemp>
+        <TTable
+          columns={columns}
+          data={data.data}
+          loading={loading}
+          onRow={handleRow}
+          rowKey={(record) => record.hc_no}
+        />
+      </LTable>
     </div>
   );
 };

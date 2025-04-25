@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { Row, Col, Tag, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
-import SearchTemp from "@ui/searchTemp";
-import TableTemp from "@ui/tableTemp";
-import PaginationTemp from "@ui/paginationTemp";
+import SearchTemp from "@/components/ui/tempSearch";
+import TableTemp from "@/components/ui/tempTable";
+import PaginationTemp from "@/components/ui/tempPagination";
 
-import { columns } from "../adminColumns/paymentColumn";
+import { LTable, TSearch, TTable, TPagination } from "@components/ui";
+
+import { columns } from "../_columns/paymentColumn";
 
 import PaymentService from "@/services/admin/paymentService";
 
@@ -68,36 +71,31 @@ const Payment = () => {
 
   return (
     <div>
-      <Row className="flex sm:justify-between items-end">
-        <Col span={20}>
-          <Col span={24}>
-            <SearchTemp onSearch={handleSearch} />
-          </Col>
-          <Col span={12}>
-            <Tag>{`total : ${data?.total ?? "N/A"}`}</Tag>
-          </Col>
-        </Col>
-        <Col>
-          <Button color="cyan" variant="solid">
-            create for {month}
+      <LTable
+        onSearch={<TSearch onSearch={handleSearch} />}
+        total={data?.total ?? "N/A"}
+        rightButton={
+          <Button variant="solid">
+            <PlusOutlined /> {month}
           </Button>
-        </Col>
-      </Row>
-      <TableTemp
-        columns={columns}
-        loading={loading}
-        data={data.data}
-        rowKey={(record) => record.hc_no}
-      />
-      <Row justify={"end"} className="my-10">
-        <PaginationTemp
-          default={currentPage}
-          pageSize={pageSize}
-          total={total}
-          onChange={handlePageChange}
-          className="mt-4 text-center"
+        }
+        pagination={
+          <TPagination
+            default={currentPage}
+            pageSize={pageSize}
+            total={total}
+            onChange={handlePageChange}
+            className="mt-4 text-center"
+          />
+        }
+      >
+        <TTable
+          columns={columns}
+          loading={loading}
+          data={data.data}
+          rowKey={(record) => record.payment_no}
         />
-      </Row>
+      </LTable>
     </div>
   );
 };

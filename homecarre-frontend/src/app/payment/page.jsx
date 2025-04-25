@@ -1,5 +1,5 @@
 import React from "react";
-import Payment from "@admin/payment/Payment";
+import Payment from "@pages/payment/Payment";
 
 const PaymentPage = () => {
   return (
