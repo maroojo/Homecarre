@@ -72,7 +72,7 @@ const ClientForm = ({ id, onClose }) => {
               name="client_type"
               rules={[{ required: true, message: "Please select client type" }]}
             >
-              <Select style={{ textAlign: "left" }}  placeholder="Select">
+              <Select style={{ textAlign: "left" }} placeholder="Select">
                 <Select.Option value="tenant">Tenant</Select.Option>
                 <Select.Option value="owner">Owner</Select.Option>
               </Select>
@@ -87,10 +87,7 @@ const ClientForm = ({ id, onClose }) => {
               <Form.Item
                 label="Email"
                 name="email"
-                rules={[
-                  { required: true, message: "Please enter email" },
-                  { type: "email", message: "Invalid email format" },
-                ]}
+                rules={[{ type: "email", message: "Invalid email format" }]}
               >
                 <Input />
               </Form.Item>
