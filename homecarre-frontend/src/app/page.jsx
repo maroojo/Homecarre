@@ -1,12 +1,12 @@
 import React from 'react';
-import Admin from '@pages/Admin';
+import ContractPage from '@/components/modules/home/contract/ContractPage';
 
-const AdminPage = () => {
+const Page = () => {
     return (
         <div>
-            <Admin />
+            <ContractPage />
         </div>
     );
 };
 
-export default AdminPage;
+export default Page;

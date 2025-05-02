@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { parseCookies, destroyCookie } from "nookies";
-import LoginModal from "@pages/_modals/LoginModal";
-import AdminService from "@/services/admin/AuthService";
+import LoginModal from "@/components/modules/loginModal/LoginModal";
+import { authentication, loginService, logoutService } from "@/services/Auth";
+import { parseCookies } from "nookies";
 
 const AuthContext = createContext();
 
@@ -13,31 +13,29 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  const login = (token, user_id, user_name, user_fullname, user_auth) => {
-    setUser({ user_id, user_name, user_fullname, user_auth });
-    setIsAuthenticated(true);
-    setIsModalOpen(false);
+  const login = async (username, password) => {
+    const res = await loginService(username, password);
+    if (res) {
+      setIsAuthenticated(true);
+      setUser(res);
+      setIsModalOpen(false);
+    }
+    return res;
   };
 
-  const logout = () => {
-    destroyCookie(null, "user_id");
-    destroyCookie(null, "laravel_session");
-    setUser(null);
+  const logout = async() => {
+    await logoutService();
     setIsAuthenticated(false);
+    setUser(null);
     setIsModalOpen(true);
   };
-  const {
-    Login: loginService,
-    Logout: logoutService,
-    checkUser,
-  } = AdminService(login, logout);
 
   useEffect(() => {
     const cookies = parseCookies();
     const id = cookies.user_id;
 
     if (id) {
-      checkUser(id).then((res) => {
+      authentication(id).then((res) => {
         if (res) {
           setIsAuthenticated(true);
           setUser(res.result);
@@ -59,17 +57,18 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setIsModalOpen(true);
     };
-  
+
     window.addEventListener("session-expired", handleSessionExpired);
-    return () => window.removeEventListener("session-expired", handleSessionExpired);
+    return () =>
+      window.removeEventListener("session-expired", handleSessionExpired);
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        Login: loginService,
-        Logout: logoutService,
+        login,
+        logout,
         loading,
         user,
       }}

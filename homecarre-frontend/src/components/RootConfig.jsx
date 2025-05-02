@@ -1,9 +1,12 @@
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AuthProvider } from "@/context/AuthContext";
 
 const RootConfig = ({ children }) => {
-  return (  
+  return (
     <AuthProvider>
-      {children}
+      <AntdRegistry>
+        {children}
+      </AntdRegistry>
     </AuthProvider>
   );
 };

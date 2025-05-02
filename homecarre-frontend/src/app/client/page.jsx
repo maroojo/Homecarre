@@ -1,5 +1,5 @@
 import React from "react";
-import ClientAccount from "@pages/clientAccount/ClientAccount";
+import ClientAccount from "@/components/modules/clientAccount/ClientAccount";
 
 const ClientPage = () => {
   return (

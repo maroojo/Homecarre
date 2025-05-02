@@ -1,5 +1,5 @@
 import React from "react";
-import Request from "@pages/request/Request";
+import Request from "@/components/modules/request/Request";
 
 const RequestPage = () => {
   return (

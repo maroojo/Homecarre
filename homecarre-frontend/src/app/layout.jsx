@@ -1,15 +1,13 @@
 import "./globals.css";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
+
 import "@ant-design/v5-patch-for-react-19";
-import LayoutPage from "@/components/LayoutPage";
+import LayoutPage from "@/components/layout/LayoutPage";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AntdRegistry>
-          <LayoutPage>{children}</LayoutPage>
-        </AntdRegistry>
+        <LayoutPage>{children}</LayoutPage>
       </body>
     </html>
   );

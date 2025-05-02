@@ -3,12 +3,11 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@pages/*": ["src/components/pages/*"],
       "@components/*": ["src/components/*"],
-      "@admin/*": ["src/components/pages/admin/*"],
-      "@customer/*": ["src/components/pages/customer/*"],
-      "@ui/*": ["src/components/ui/*"],
-      "@mock/*":["src/components/mock/*"]
+      "@modules/*": ["src/components/modules/*"],
+      "@services/*": ["src/services/*"],
+      "@homecarre-ui": ["src/components/ui"],
+      "@homecarre-api":["src/services"]
     }
   }
 }
