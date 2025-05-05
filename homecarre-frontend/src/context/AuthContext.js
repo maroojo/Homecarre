@@ -1,62 +1,95 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import LoginModal from "@/components/modules/loginModal/LoginModal";
-import { authentication, loginService, logoutService } from "@/services/Auth";
-import { parseCookies } from "nookies";
+import Cookies from "js-cookie";
+import dynamic from "next/dynamic";
+const LoginModal = dynamic(() => import("@modules/loginModal/LoginModal"), {
+  ssr: false,
+});
+import { hcAuthentication } from "@/services";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { authentication, loginService, logoutService } = hcAuthentication;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  const login = async (username, password) => {
-    const res = await loginService(username, password);
-    if (res) {
-      setIsAuthenticated(true);
-      setUser(res);
-      setIsModalOpen(false);
-    }
-    return res;
-  };
-
-  const logout = async() => {
-    await logoutService();
-    setIsAuthenticated(false);
+  const handleSessionExpired = () => {
+    // setIsAuthenticated(false);
     setUser(null);
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    const cookies = parseCookies();
-    const id = cookies.user_id;
-
-    if (id) {
-      authentication(id).then((res) => {
-        if (res) {
-          setIsAuthenticated(true);
-          setUser(res.result);
-        } else {
-          setIsAuthenticated(false);
-          setIsModalOpen(true);
-        }
-        setLoading(false);
-      });
+  const getUserFromCookie = () => {
+    const userInfoCookie = Cookies.get("userInfo");
+    if (userInfoCookie) {
+      try {
+        const userInfo = JSON.parse(userInfoCookie);
+        setUser(userInfo);
+      } catch (err) {
+        console.error("Failed to parse userInfo cookie:", err);
+      }
     } else {
+      setUser(null);
+    }
+  };
+
+  const checkLoginStatus = async () => {
+    try {
+      await authentication();
+    } catch (err) {
+      console.error("Error checking login status:", err);
       setIsModalOpen(true);
+    } finally {
       setLoading(false);
     }
+  };
+
+  const login = async (body) => {
+    try {
+      const res = await loginService(body);
+      if (res?.success) {
+        // setIsAuthenticated(true);
+        getUserFromCookie();
+        setIsModalOpen(false);
+      }
+    } catch (err) {
+      console.error("Error logging in:", err);
+      setIsModalOpen(true);
+    } finally {
+      setLoading(false);
+    }
+    // return res;
+  };
+
+  const logout = async () => {
+    try {
+      await logoutService();
+    } catch (err) {
+      console.error("Error logging out:", err);
+    } finally {
+      // setIsAuthenticated(false);
+      setUser(null);
+      Cookies.remove("userInfo");
+      setIsModalOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    // checkLoginStatus();
+  }, [user]);
+
+  useEffect(() => {
+    getUserFromCookie();
+    setLoading(false);
   }, []);
 
   useEffect(() => {
-    const handleSessionExpired = () => {
-      setIsAuthenticated(false);
-      setUser(null);
-      setIsModalOpen(true);
-    };
+    handleSessionExpired();
 
     window.addEventListener("session-expired", handleSessionExpired);
     return () =>
@@ -66,15 +99,14 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
+        // isAuthenticated,
         login,
         logout,
         loading,
         user,
       }}
     >
-      {children}
-      {isModalOpen && <LoginModal />}
+      {loading || isModalOpen ? <LoginModal /> : <div>{children}</div>}
     </AuthContext.Provider>
   );
 };

@@ -53,11 +53,7 @@ const ContractsService = () => {
 
   const updateContract = async (data) => {
     try {
-      const response = await api(`/h/updatehomecarre`, "POST", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await api(`/h/updatehomecarre`, "POST", data);
       return { isSuccess: response.status === 200 };
     } catch (error) {
       console.error("Error setting favorite:", error);
@@ -67,11 +63,7 @@ const ContractsService = () => {
 
   const createContract = async (data) => {
     try {
-      const response = await api(`/h/inserthomecarre`, "POST", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await api(`/h/inserthomecarre`, "POST", data);
       return { isSuccess: response.status === 200 };
     } catch (error) {
       console.error("Error setting favorite:", error);

@@ -1,10 +1,14 @@
-import api from "@/util/api";
-
-const Authentication = async (user_id) => {
+const Authentication = async () => {
   try {
-    const response = await api(`/admin/checkuser`, "POST", {
-      user_id,
+    const response = await fetch(`api/auth/authentication`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    if (!response) {
+      throw new Error("Network response was not ok");
+    }
     return response;
   } catch (error) {
     console.error("Check User error:", error);

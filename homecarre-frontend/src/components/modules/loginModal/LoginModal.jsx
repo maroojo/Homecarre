@@ -2,28 +2,24 @@ import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
-import AdminService from "@/services/Auth/Authentication";
 import useNotification from "@/hooks/useNotification";
 
-import ModalTemp from "@/components/ui/overlays/baseModal";
+import { OModal } from "@homecarre-ui";
 
 const LoginModal = () => {
   const [form] = Form.useForm();
   const { login } = useAuth();
-  const { success, warning } = useNotification();
+  const { warning } = useNotification();
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await login(values.username, values.password);
-
-      if (response) {
-        setIsOpen(false);
-      } else {
-        warning({ message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
-      }
+      await login({
+        user: values.username,
+        password: values.password,
+      });
     } catch (error) {
       console.error("Login error:", error);
       warning({
@@ -35,7 +31,7 @@ const LoginModal = () => {
   };
 
   return (
-    <ModalTemp
+    <OModal
       visible={isOpen}
       onClose={null}
       maskClos={false}
@@ -74,7 +70,7 @@ const LoginModal = () => {
           </Form.Item>
         </Form>
       </div>
-    </ModalTemp>
+    </OModal>
   );
 };
 export default LoginModal;

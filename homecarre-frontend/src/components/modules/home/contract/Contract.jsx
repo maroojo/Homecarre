@@ -12,13 +12,9 @@ import {
   Button,
   Spin,
 } from "antd";
-import {
-  UploadOutlined,
-  EditOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
+import { UploadOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { hcContract } from "@/services";
+import { hcContract } from "@homecarre-api";
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -32,27 +28,20 @@ const Contract = (id) => {
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [tenantCode, setTenantCode] = useState([]);
+  const [ownerCode, setOwnerCode] = useState([]);
 
   const uploadProps = {
-    name: "file",
-    multiple: true,
-    fileList,
-    onChange(info) {
-      let newFileList = [...info.fileList];
-      setFileList(newFileList);
-
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    beforeUpload: (file) => {
+      console.log("Before Upload:", file);
+      setFileList((prevList) => [...prevList, file]);
+      return false;
     },
-    onRemove(file) {
+    onRemove: (file) => {
       setFileList((prev) => prev.filter((item) => item.uid !== file.uid));
+    },
+    onChange: (info) => {
+      console.log("File Info:", info);
     },
   };
 
@@ -74,6 +63,8 @@ const Contract = (id) => {
       const response = await getContractById(id.id);
       if (response?.data) {
         setData(response.data);
+        setTenantCode(response.data.tenant_code);
+        setOwnerCode(response.data.owner_code);
         form.setFieldsValue({
           HCNo: response.data.hc_no,
           propertyCode: response.data.property_code,
@@ -101,18 +92,20 @@ const Contract = (id) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      setLoading(true);
       const values = await form.validateFields();
-
+      console.log("Validated Values:", values);
       const formData = new FormData();
       const [startDate, endDate] = values.dateRange || [];
-
+      formData.append("hc_no", values.HCNo);
       formData.append("property_code", values.propertyCode);
-      formData.append("owner_code", values.ownerCode);
-      formData.append("tenant_code", values.tenantCode);
+      formData.append("tenant_code", tenantCode);
+      formData.append("owner_code", ownerCode);
       formData.append("term_of_lease", values.time);
-      formData.append("date_start", dayjs(startDate).format(dateFormat));
-      formData.append("date_end", dayjs(endDate).format(dateFormat));
+      formData.append(
+        "date_start",
+        dayjs(startDate).toISOString().split("T")[0]
+      );
+      formData.append("date_end", dayjs(endDate).toISOString().split("T")[0]);
       formData.append("rent_price", values.rentPrice);
       formData.append("date_pay", values.agreementDatePay);
       formData.append(
@@ -122,25 +115,25 @@ const Contract = (id) => {
       formData.append("bank_name", values.bank);
       formData.append("bank_account", values.accountName);
       formData.append("bank_no", values.accountNo);
-      formData.append("tenant_fullname", values.tenantName);
-      formData.append("tenant_telephone", values.tenantTel);
-      formData.append("tenant_email", values.tenantEmail || "");
-      formData.append("owner_fullname", values.ownerName);
-      formData.append("owner_telephone", values.ownerTel);
-      formData.append("owner_email", values.ownerEmail || "");
-
       fileList.forEach((file) => {
-        formData.append("document", file.originFileObj);
+        formData.append("document", file);
       });
+
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+
       const response = await updateContract(formData);
 
       if (response?.isSuccess) {
         message.success("Contract updated successfully");
         setIsEdit(false);
-        callContract();
+        // callContract();
       } else {
         throw new Error("Update failed");
       }
+      console.log("Form data: ", formData);
+      message.success("Files uploaded successfully.");
     } catch (error) {
       message.error(error.message);
     } finally {

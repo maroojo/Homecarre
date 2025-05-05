@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { UploadOutlined, SaveOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { hcContract } from "@/services";
+import { hcContract } from "@homecarre-api";
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;

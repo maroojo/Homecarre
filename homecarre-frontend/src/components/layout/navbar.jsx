@@ -2,9 +2,11 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = ({ isOpen }) => {
   const pathname = usePathname();
+  const { user } = useAuth();
   const firstPath = pathname?.split("/")[1] || "home";
 
   return (
@@ -20,9 +22,15 @@ const Navbar = ({ isOpen }) => {
             : firstPath.charAt(0).toUpperCase() + firstPath.slice(1)}
         </div>
       </div>
-      <div></div>
       <div>
-        <span className="text-lg font-semibold ">Admin</span>
+        {user ? (
+          <div className="flex items-end gap-4">
+            <div className="text-xs font-light pb-0.5">{user.userName}</div>
+            <div className="text-2xl font-semibold ">{user.role}</div>
+          </div>
+        ) : (
+          <span className="text-lg font-semibold ">Admin</span>
+        )}
       </div>
     </div>
   );

@@ -118,6 +118,7 @@ const ContractPage = () => {
         }
         modal={[
           <OModal
+            key="detail-modal"
             visible={detailOpen}
             onClose={handleCloseDetail}
             width={"95%"}
@@ -126,6 +127,7 @@ const ContractPage = () => {
             <Contract id={selectedId} />
           </OModal>,
           <OModal
+            key="create-modal"
             visible={createOpen}
             onClose={() => setCreateOpen(false)}
             width={"95%"}
