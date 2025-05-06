@@ -5,6 +5,7 @@ export async function POST(req) {
 
   const res = await fetch("https://accomasia.co.th/homecare/adminlogin", {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });

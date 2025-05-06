@@ -14,6 +14,7 @@ export async function POST(req) {
     "https://accomasia.co.th/homecare/api/admin/checkuser",
     {
       method: "POST",
+      credentials: "include",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

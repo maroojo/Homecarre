@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const LoginModal = dynamic(() => import("@modules/loginModal/LoginModal"), {
   ssr: false,
 });
-import { hcAuthentication } from "@/services";
+import { hcAuthentication } from "@homecarre-api";
 
 const AuthContext = createContext();
 
@@ -80,12 +80,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // checkLoginStatus();
-  }, [user]);
-
-  useEffect(() => {
     getUserFromCookie();
+    checkLoginStatus();
     setLoading(false);
+    console.log("check pass", user);
   }, []);
 
   useEffect(() => {
