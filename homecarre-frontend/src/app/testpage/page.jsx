@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import TestPages from "@/components/modules/test/testPages";
 import { Form, Input, Button, Select, Upload } from "antd";
