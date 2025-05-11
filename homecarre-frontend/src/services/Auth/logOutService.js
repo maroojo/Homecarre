@@ -1,6 +1,6 @@
 const LogOutService = async () => {
   try {
-    const response = await fetch(`/api/auth/logout`);
+    const response = await fetch(`/admin/logout`);
     return response;
   } catch (error) {
     console.error("Logout error:", error);

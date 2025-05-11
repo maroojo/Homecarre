@@ -54,7 +54,7 @@ const ContractsService = () => {
   const updateContract = async (data) => {
     try {
       const response = await api(`/h/updatehomecarre`, "POST", data);
-      return { isSuccess: response.status === 200 };
+      return response;
     } catch (error) {
       console.error("Error setting favorite:", error);
       return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
@@ -64,7 +64,7 @@ const ContractsService = () => {
   const createContract = async (data) => {
     try {
       const response = await api(`/h/inserthomecarre`, "POST", data);
-      return { isSuccess: response.status === 200 };
+      return response;
     } catch (error) {
       console.error("Error setting favorite:", error);
       return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
@@ -81,6 +81,29 @@ const ContractsService = () => {
     }
   };
 
+  const uploadFile = async (params) => {
+    const { hc_no, file, typeFile } = params;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await api(
+        `/api/admin/contract/document/${hc_no}`,
+        "POST",
+        { document: formData, typefile: typeFile },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
+    }
+  };
+
   return {
     getContracts,
     getContract,
@@ -88,6 +111,7 @@ const ContractsService = () => {
     updateContract,
     createContract,
     propertyCode,
+    uploadFile,
   };
 };
 

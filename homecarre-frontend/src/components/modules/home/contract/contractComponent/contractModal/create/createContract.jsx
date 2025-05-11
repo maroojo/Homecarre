@@ -62,7 +62,11 @@ const CreateContract = () => {
     onRemove(file) {
       setFileList((prev) => prev.filter((item) => item.uid !== file.uid));
     },
-    beforeUpload: () => false,
+    beforeUpload: (file) => {
+      console.log("Before Upload:", file);
+      setFileList((prevList) => [...prevList, file]);
+      return false;
+    },
   };
 
   const calculateScheduleDate = (date_pay) => {
@@ -105,28 +109,30 @@ const CreateContract = () => {
       formData.append("term_of_lease", values.time);
       formData.append("date_start", dayjs(startDate).format(dateFormat));
       formData.append("date_end", dayjs(endDate).format(dateFormat));
-      formData.append("rent_price", values.rentPrice);
-      formData.append("date_pay", values.agreementDatePay);
+      formData.append("rent_price", values.rentPrice|| "");
+      formData.append("date_pay", values.agreementDatePay|| "");
       formData.append(
         "schedule_date",
         calculateScheduleDate(values.agreementDatePay)
       );
-      formData.append("bank_name", values.bank);
-      formData.append("bank_account", values.accountName);
-      formData.append("bank_no", values.accountNo);
-      formData.append("tenant_fullname", values.tenantName);
+      formData.append("bank_name", values.bank|| "");
+      formData.append("bank_account", values.accountName|| "");
+      formData.append("bank_no", values.accountNo|| "");
+      formData.append("tenant_fullname", values.tenantName|| "");
       formData.append("tenant_telephone", values.tenantTel);
       formData.append("tenant_email", values.tenantEmail || "");
-      formData.append("owner_fullname", values.ownerName);
+      formData.append("owner_fullname", values.ownerName)|| "";
       formData.append("owner_telephone", values.ownerTel);
       formData.append("owner_email", values.ownerEmail || "");
 
       fileList.forEach((file) => {
-        formData.append("document", file.originFileObj);
+        if (file.originFileObj) {
+          formData.append("document", file.originFileObj);
+        }
       });
 
       const response = await createContract(formData);
-      if (response?.isSuccess) {
+      if (response) {
         message.success("Contract created successfully");
         form.resetFields();
         setFileList([]);

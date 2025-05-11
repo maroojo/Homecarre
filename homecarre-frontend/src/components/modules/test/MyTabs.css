@@ -1,0 +1,33 @@
+.tabs-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .tabs-custom .ant-tabs-nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly; /* ให้แท็บกระจายพื้นที่เท่าๆ กัน */
+  }
+  
+  .tabs-custom .ant-tabs-tab {
+    flex: 1; /* ทำให้แท็บแต่ละอันมีพื้นที่เท่ากัน */
+    text-align: center;
+  }
+  
+  .ant-tabs-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ant-tabs-tabpane {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

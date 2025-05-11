@@ -7,7 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import { hcContract } from "@/services";
 import { LTable, TSearch, TTable, TPagination } from "@homecarre-ui";
-import { columns } from "./contractColumn";
+import { columns } from "./contractComponent/contractColumn";
 
 //#region lazy load
 const OModal = dynamic(
@@ -15,11 +15,11 @@ const OModal = dynamic(
   { ssr: false }
 );
 
-const Contract = dynamic(() => import("./Contract"), {
+const Contract = dynamic(() => import("./contractComponent/contractModal/Contract"), {
   ssr: false,
 });
 
-const CreateContract = dynamic(() => import("./createContract"), {
+const CreateContract = dynamic(() => import("./contractComponent/contractModal/create/createContract"), {
   ssr: false,
 });
 //#endregion lazy load

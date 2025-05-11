@@ -41,7 +41,7 @@ const ClientService = () => {
 
   const updateClient = async (clientData) => {
     try {
-      const response = await api(`a/updateclient`, "POST", {
+      const response = await api(`/a/updateclient`, "POST", {
         client_code: clientData.client_code,
         client_type: clientData.client_type,
         fullname: clientData.fullname,

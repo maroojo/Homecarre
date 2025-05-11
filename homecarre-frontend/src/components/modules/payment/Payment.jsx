@@ -7,7 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import { LTable, TSearch, TTable, TPagination } from "@homecarre-ui";
 
-import { columns } from "../_columns/paymentColumn";
+import { columns } from "./paymentComponent/paymentColumn";
 
 import PaymentService from "@/services/payment/paymentService";
 

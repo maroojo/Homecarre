@@ -25,8 +25,8 @@ const Navbar = ({ isOpen }) => {
       <div>
         {user ? (
           <div className="flex items-end gap-4">
-            <div className="text-xs font-light pb-0.5">{user.userName}</div>
-            <div className="text-2xl font-semibold ">{user.role}</div>
+            <div className="text-xs font-light pb-0.5">{user.name}</div>
+            <div className="text-2xl font-semibold uppercase">{user.role}</div>
           </div>
         ) : (
           <span className="text-lg font-semibold ">Admin</span>

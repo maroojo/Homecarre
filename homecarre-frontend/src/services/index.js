@@ -1,3 +1,5 @@
+// namespace: @homecarre-api
+
 // authorization & authentication service
 export * as hcAuthentication from "@services/Auth";
 

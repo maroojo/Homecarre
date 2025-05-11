@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
-import { columns } from "@/components/modules/_columns/clientColumn";
+import { columns } from "@/components/modules/clientAccount/clientComponent/clientColumn";
 
 import ClientService from "@/services/client/clientService";
 

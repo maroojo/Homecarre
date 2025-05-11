@@ -15,6 +15,7 @@ import {
   faHouse,
   faScrewdriver,
   faMoneyBillTransfer,
+  faFileInvoiceDollar,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -49,6 +50,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         router.push("/request");
       },
     },
+
     {
       key: "/payment",
       icon: (
@@ -60,6 +62,19 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       label: isOpen ? <span>Payment</span> : "",
       onClick: () => {
         router.push("/payment");
+      },
+    },
+    {
+      key: "/payment/create",
+      icon: (
+        <FontAwesomeIcon
+          icon={faFileInvoiceDollar}
+          style={{ fontSize: "26px", marginRight: "8 px" }}
+        />
+      ),
+      label: isOpen ? <span>Create Payment</span> : "",
+      onClick: () => {
+        router.push("/payment/create");
       },
     },
     {

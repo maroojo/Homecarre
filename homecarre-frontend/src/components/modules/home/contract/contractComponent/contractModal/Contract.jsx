@@ -46,16 +46,21 @@ const Contract = (id) => {
   };
 
   const calculateScheduleDate = (date_pay) => {
-    let today = dayjs();
-    let scheduleDate;
+    // let today = dayjs();
+    // let scheduleDate;
 
+    // if (date_pay >= 1 && date_pay <= 5) {
+    //   let prevMonth = today.subtract(1, "month");
+    //   scheduleDate = prevMonth.date(24 + (date_pay - 1));
+    //   scheduleDate = today.date(date_pay).subtract(5, "day");
+    // }
+
+    // return scheduleDate ? scheduleDate.date() : null;
     if (date_pay >= 1 && date_pay <= 5) {
-      let prevMonth = today.subtract(1, "month");
-      scheduleDate = prevMonth.date(24 + (date_pay - 1));
-      scheduleDate = today.date(date_pay).subtract(5, "day");
+      const schedule = dayjs().date(date_pay).subtract(5, "day");
+      return schedule.date();
     }
-
-    return scheduleDate.date();
+    return null;
   };
 
   const callContract = async () => {

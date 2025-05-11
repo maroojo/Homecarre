@@ -7,7 +7,7 @@ import { hcRequest } from "@homecarre-api";
 
 import { LTable, TSearch, TTable, TPagination } from "@homecarre-ui";
 
-import { columns } from "../_columns/requestColumn";
+import { columns } from "./requestComponent/requestColumn";
 
 const Request = () => {
   const { getRepairs } = hcRequest();
