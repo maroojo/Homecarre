@@ -1,12 +1,12 @@
-import React from 'react';
-import ContractPage from '@/components/modules/home/contract/ContractPage';
+import React from "react";
+import { PaContractList } from "@homecarre-modules";
 
 const Page = () => {
-    return (
-        <div>
-            <ContractPage />
-        </div>
-    );
+  return (
+    <div>
+      <PaContractList />
+    </div>
+  );
 };
 
 export default Page;

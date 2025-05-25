@@ -1,7 +1,7 @@
-import { Button, Tag, Space } from "antd";
-import { InfoOutlined, FileSearchOutlined } from "@ant-design/icons";
+import { Space, Dropdown } from "antd";
+import StatusDropdownButton from "./StatusDropdownButton";
 
-export const columns = [
+export const columns = (status = [], onChangeStatus,setOpenModal) => [
   {
     title: "Payment ID",
     dataIndex: "payment_no",
@@ -71,8 +71,14 @@ export const columns = [
     title: "Status",
     dataIndex: "status",
     key: "status",
-    render: (text) => (
-      <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
+    render: (text, record) => (
+      <StatusDropdownButton
+        text={text}
+        statusList={status}
+        record={record}
+        onChange={onChangeStatus}
+        setOpenModal={setOpenModal}
+      />
     ),
   },
 ];

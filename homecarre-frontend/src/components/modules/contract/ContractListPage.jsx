@@ -2,36 +2,40 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { hcContract } from "@/services";
-import { LTable, TSearch, TTable, TPagination } from "@homecarre-ui";
+import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./contractComponent/contractColumn";
 
 //#region lazy load
-const OModal = dynamic(
-  () => import("@homecarre-ui").then((mod) => mod.OModal),
+const CoModal = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoModal),
   { ssr: false }
 );
-
-const Contract = dynamic(() => import("./contractComponent/contractModal/Contract"), {
-  ssr: false,
-});
-
-const CreateContract = dynamic(() => import("./contractComponent/contractModal/create/createContract"), {
-  ssr: false,
-});
+const Contract = dynamic(
+  () => import("./contractComponent/contractModal/Contract"),
+  {
+    ssr: false,
+  }
+);
+const CreateContract = dynamic(
+  () => import("./contractComponent/contractModal/create/createContract"),
+  {
+    ssr: false,
+  }
+);
 //#endregion lazy load
 
-const ContractPage = () => {
+const ContractListPage = () => {
+  const router = useRouter();
   const { getContracts, getContract } = hcContract();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
-  const [selectedId, setSelectedId] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [detailOpen, setDetailOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,15 +68,6 @@ const ContractPage = () => {
     }
   };
 
-  const handleDetail = (id) => {
-    setSelectedId(id);
-    setDetailOpen(true);
-  };
-  const handleCloseDetail = () => {
-    setDetailOpen(false);
-    setSelectedId(null);
-  };
-
   const handleSearch = (params) => {
     setSearchKey(params);
     setCurrentPage(1);
@@ -83,7 +78,7 @@ const ContractPage = () => {
       if (e.target.closest("button")) {
         return;
       }
-      handleDetail(record.hc_no);
+      router.push(`/${record.hc_no}`);
     },
     className: "cursor-pointer",
   });
@@ -99,8 +94,8 @@ const ContractPage = () => {
 
   return (
     <div>
-      <LTable
-        onSearch={<TSearch onSearch={handleSearch} />}
+      <ClTable
+        onSearch={<CtSearch onSearch={handleSearch} />}
         total={data?.total ?? "N/A"}
         rightButton={
           <Button onClick={() => setCreateOpen(true)}>
@@ -108,7 +103,7 @@ const ContractPage = () => {
           </Button>
         }
         pagination={
-          <TPagination
+          <CtPagination
             default={currentPage}
             pageSize={pageSize}
             total={total}
@@ -117,16 +112,7 @@ const ContractPage = () => {
           />
         }
         modal={[
-          <OModal
-            key="detail-modal"
-            visible={detailOpen}
-            onClose={handleCloseDetail}
-            width={"95%"}
-            maskClos={false}
-          >
-            <Contract id={selectedId} />
-          </OModal>,
-          <OModal
+          <CoModal
             key="create-modal"
             visible={createOpen}
             onClose={() => setCreateOpen(false)}
@@ -134,19 +120,19 @@ const ContractPage = () => {
             maskClos={false}
           >
             <CreateContract />
-          </OModal>,
+          </CoModal>,
         ]}
       >
-        <TTable
+        <CtTable
           columns={columns}
           data={data.data}
           loading={loading}
           onRow={handleRow}
           rowKey={(record) => record.hc_no}
         />
-      </LTable>
+      </ClTable>
     </div>
   );
 };
 
-export default ContractPage;
+export default ContractListPage;

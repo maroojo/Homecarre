@@ -5,25 +5,23 @@ import dynamic from "next/dynamic";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
-import { columns } from "@/components/modules/clientAccount/clientComponent/clientColumn";
-
-import ClientService from "@/services/client/clientService";
-
-import { LTable, TSearch, TTable, TPagination } from "@homecarre-ui";
+import { columns } from "./clientComponent/clientColumn";
+import { hcClient } from "@homecarre-api";
+import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 
 //#region lazy load
-const OModal = dynamic(
-  () => import("@homecarre-ui").then((mod) => mod.OModal),
+const CoModal = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoModal),
   { ssr: false }
 );
 const ClientForm = dynamic(
-  () => import("@/components/modules/clientAccount/clientComponent/ClientForm"),
+  () => import("@/components/modules/client/clientComponent/ClientForm"),
   { ssr: false }
 );
 //#endregion lazy load
 
-const ClientAccount = () => {
-  const { getClients, getClient } = ClientService();
+const ClientListPage = () => {
+  const { getClients, getClient } = hcClient();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
 
   const [data, setData] = useState([]);
@@ -96,8 +94,8 @@ const ClientAccount = () => {
 
   return (
     <div>
-      <LTable
-        onSearch={<TSearch onSearch={handleSearch} />}
+      <ClTable
+        onSearch={<CtSearch onSearch={handleSearch} />}
         total={data?.total ?? "N/A"}
         rightButton={
           <Button onClick={() => handleOpenModal(null)}>
@@ -106,7 +104,7 @@ const ClientAccount = () => {
           </Button>
         }
         pagination={
-          <TPagination
+          <CtPagination
             default={currentPage}
             pageSize={pageSize}
             total={total}
@@ -115,7 +113,7 @@ const ClientAccount = () => {
           />
         }
         modal={
-          <OModal
+          <CoModal
             visible={modalOpen}
             onClose={handleCloseModal}
             width={"40%"}
@@ -127,18 +125,18 @@ const ClientAccount = () => {
                 onClose={() => setModalOpen(false)}
               />
             </div>
-          </OModal>
+          </CoModal>
         }
       >
-        <TTable
+        <CtTable
           columns={columns(handleOpenModal)}
           data={data.data}
           loading={loading}
           rowKey={(record) => record.client_code}
         />
-      </LTable>
+      </ClTable>
     </div>
   );
 };
 
-export default ClientAccount;
+export default ClientListPage;

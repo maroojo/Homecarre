@@ -19,8 +19,8 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-const OConfirm = dynamic(
-  () => import("@homecarre-ui").then((mod) => mod.OConfirm),
+const CoConfirm = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoConfirm),
   { ssr: false }
 );
 
@@ -105,7 +105,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   return (
     <div
-      className={`fixed left-0 top-0 z-30 h-screen bg-wild-strawberry-500 text-white
+      className={`fixed left-0 top-0 z-30 h-screen bg-primary-base text-white
       transition-all duration-300 ease-in-out 
       ${isOpen ? "w-48" : "w-16"}`}
       onMouseEnter={() => setIsOpen(true)}
@@ -151,7 +151,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       >
         {isOpen ? "Log Out" : ""}
       </Button>
-      <OConfirm
+      <CoConfirm
         visible={openModal}
         onClose={() => setOpenModal(false)}
         closable={true}

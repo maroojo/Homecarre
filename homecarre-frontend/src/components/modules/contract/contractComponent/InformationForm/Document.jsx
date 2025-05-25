@@ -1,8 +1,23 @@
 import React from "react";
-import { Form, Input, Typography } from "antd";
+import { Form, Input, Typography, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
 const UploadTab = () => {
+  const { Dragger } = Upload;
+  const uploadProps = {
+    beforeUpload: (file) => {
+      console.log("Before Upload:", file);
+      setFileList((prevList) => [...prevList, file]);
+      return false;
+    },
+    onRemove: (file) => {
+      setFileList((prev) => prev.filter((item) => item.uid !== file.uid));
+    },
+    onChange: (info) => {
+      console.log("File Info:", info);
+    },
+  };
   return (
     <div>
       <Form.Item>

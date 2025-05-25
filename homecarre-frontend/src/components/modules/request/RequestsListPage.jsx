@@ -1,48 +1,40 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
 
-import { Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { hcRequest } from "@homecarre-api";
+import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
+import { columns } from "./requestComponent/requestColumn";
 
-import { LTable, TSearch, TTable, TPagination } from "@homecarre-ui";
+const RequestListPage = () => {
+  const { getRepairs } = hcRequest();
 
-import { columns } from "./paymentComponent/paymentColumn";
-
-import PaymentService from "@/services/payment/paymentService";
-
-import { useAuth } from "@/context/AuthContext";
-
-const Payment = () => {
-  const { user } = useAuth();
-  const { getPayment } = PaymentService();
-  const date = dayjs();
-  const month = date.format("MMM");
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  const callGetPayment = async (searchParams, page = 1) => {
+  const callGetRepair = async (searchParams, page = 1) => {
     setLoading(true);
     try {
       let response;
       if (searchParams.keyword || searchParams.date) {
-        response = await getPayment(
+        response = await getRepairs(
           searchParams.keyword,
           searchParams.date || [],
           page,
           pageSize
         );
       } else {
-        response = await getPayment(page, pageSize);
+        response = await getRepairs(page, pageSize);
       }
       if (response) {
         setData(response);
         setTotal(response.total || 0);
+        console.log(response);
       }
     } catch (error) {
       console.error("API error:", error);
@@ -62,21 +54,18 @@ const Payment = () => {
   };
 
   useEffect(() => {
-    callGetPayment(searchKey);
+    callGetRepair(searchKey);
   }, [searchKey]);
+
+  const tableData = data ? data.data : [];
 
   return (
     <div>
-      <LTable
-        onSearch={<TSearch onSearch={handleSearch} />}
+      <ClTable
+        onSearch={<CtSearch onSearch={handleSearch} />}
         total={data?.total ?? "N/A"}
-        rightButton={
-          <Button variant="solid">
-            <PlusOutlined /> {month}
-          </Button>
-        }
         pagination={
-          <TPagination
+          <CtPagination
             default={currentPage}
             pageSize={pageSize}
             total={total}
@@ -85,15 +74,14 @@ const Payment = () => {
           />
         }
       >
-        <TTable
+        <CtTable
           columns={columns}
+          data={tableData}
           loading={loading}
-          data={data.data}
-          rowKey={(record) => record.payment_no}
+          rowKey={(record) => record.request_no}
         />
-      </LTable>
+      </ClTable>
     </div>
   );
 };
-
-export default Payment;
+export default RequestListPage;

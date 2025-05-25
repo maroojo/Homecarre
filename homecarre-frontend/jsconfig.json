@@ -5,6 +5,7 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@modules/*": ["src/components/modules/*"],
+      "@homecarre-modules":["src/components/modules"],
       "@services/*": ["src/services/*"],
       "@homecarre-ui": ["src/components/ui"],
       "@homecarre-api":["src/services"]

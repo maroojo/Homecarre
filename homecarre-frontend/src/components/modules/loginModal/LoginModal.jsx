@@ -1,10 +1,12 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
 import useNotification from "@/hooks/useNotification";
 
-import { OModal } from "@homecarre-ui";
+import { CoModal } from "@homecarre-ui";
 
 const LoginModal = () => {
   const [form] = Form.useForm();
@@ -31,7 +33,7 @@ const LoginModal = () => {
   };
 
   return (
-    <OModal
+    <CoModal
       visible={isOpen}
       onClose={null}
       maskClos={false}
@@ -70,7 +72,7 @@ const LoginModal = () => {
           </Form.Item>
         </Form>
       </div>
-    </OModal>
+    </CoModal>
   );
 };
 export default LoginModal;

@@ -1,10 +1,10 @@
 import React from "react";
-import Payment from "@/components/modules/payment/Payment";
+import { PaPaymentList } from "@homecarre-modules";
 
 const PaymentPage = () => {
   return (
     <div>
-      <Payment />
+      <PaPaymentList />
     </div>
   );
 };

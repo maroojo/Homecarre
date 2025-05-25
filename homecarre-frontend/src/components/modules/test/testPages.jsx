@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import { Button } from "antd";
 import MyTabs from "./testmodal";
 
-const OModal = dynamic(
-  () => import("@homecarre-ui").then((mod) => mod.OModal),
+const CoModal = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoModal),
   { ssr: false }
 );
 
@@ -18,7 +18,7 @@ const TestPages = () => {
   return (
     <div>
       <Button onClick={handleModal}>test</Button>
-      <OModal
+      <CoModal
         visible={open}
         onClose={() => setOpen(false)}
         title="Test Modal"
@@ -26,7 +26,7 @@ const TestPages = () => {
         maskClos={false}
       >
         <MyTabs />
-      </OModal>
+      </CoModal>
     </div>
   );
 };

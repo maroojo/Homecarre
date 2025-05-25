@@ -1,10 +1,10 @@
 import React from "react";
-import Request from "@/components/modules/request/Request";
+import { PaRequestList } from "@homecarre-modules";
 
 const RequestPage = () => {
   return (
     <div>
-      <Request />
+      <PaRequestList />
     </div>
   );
 };

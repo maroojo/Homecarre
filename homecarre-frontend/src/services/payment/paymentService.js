@@ -11,7 +11,7 @@ const PaymentService = () => {
     try {
       const response = await api(
         (() => {
-          let url = `/p/getpayment?page=${page}&pagesize=${pagesize}`;
+          let url = `/admin/payments?page=${page}&pagesize=${pagesize}`;
           if (keyword) url += `&txtsearch=${keyword}`;
           if (startDate) url += `&start_date=${startDate}`;
           if (endDate) url += `&end_date=${endDate}`;
@@ -19,13 +19,36 @@ const PaymentService = () => {
         })(),
         "GET"
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error setting favorite:", error);
       return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
     }
   };
 
-  return { getPayment };
+  const getPaymentStatus = async () => {
+    try {
+      const response = await api("/admin/payment-statuses", "GET");
+      return response.data;
+    } catch (error) {
+      console.error("Error setting favorite:", error);
+      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
+    }
+  };
+
+  const updatePaymentStatus = async (id, status) => {
+    try {
+      const response = await api(`/admin/payment-update`, "PATCH", {
+        payment_id: id,
+        action: status,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error setting favorite:", error);
+      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
+    }
+  };
+
+  return { getPayment, getPaymentStatus, updatePaymentStatus };
 };
 export default PaymentService;

@@ -1,9 +1,7 @@
-import { Form, Input, Typography } from "antd";
-const { Title } = Typography;
+import { Form, Input } from "antd";
 
 const DetailTab = () => (
   <div>
-    <Title level={4}>Detail</Title>
     <Form.Item label="Homecarre No." name="HCNo">
       <Input disabled />
     </Form.Item>

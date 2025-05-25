@@ -1,10 +1,10 @@
 import React from "react";
-import ClientAccount from "@/components/modules/clientAccount/ClientAccount";
+import { PaClientList } from "@homecarre-modules";
 
 const ClientPage = () => {
   return (
     <div>
-      <ClientAccount />
+      <PaClientList />
     </div>
   );
 };

@@ -4,7 +4,8 @@ const nextConfig = {
     return [
       {
         source: "/admin/:path*",
-        destination: "http://localhost:3000/:path*", // เปลี่ยนเป็น port admin 
+        destination: "http://localhost:3000/admin/:path*", // เปลี่ยนเป็น port admin
+        // permanent: true,
       },
     ];
   },
