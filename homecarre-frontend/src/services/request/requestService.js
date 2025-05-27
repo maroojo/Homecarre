@@ -46,6 +46,7 @@ const requestService = () => {
           status: status,
         }
       );
+      console.log("first response", response);
       return response;
     } catch (error) {
       console.error("Error updating repair status:", error);
