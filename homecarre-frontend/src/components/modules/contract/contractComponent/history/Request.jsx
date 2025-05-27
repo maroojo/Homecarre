@@ -68,6 +68,7 @@ const Request = () => {
         request_no: Id,
         status: status,
       });
+      console.log("response", response);
       if (response.isSuccess) {
         callGetRepair(searchKey, currentPage);
         isSuccess({
@@ -76,7 +77,7 @@ const Request = () => {
         });
       } else {
         console.error("Error updating status:", response.message);
-                error({
+        error({
           message: `Failed to update status: ${response.message}`,
           onClose: () => {},
         });
