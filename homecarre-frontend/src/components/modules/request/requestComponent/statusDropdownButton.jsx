@@ -1,21 +1,15 @@
-import { Dropdown } from "antd";
+import { Dropdown, Tag } from "antd";
 import React, { useState } from "react";
 
 const StatusDropdownButton = ({ text, statusList, record, onChange }) => {
-  const color = (text) => {
-    switch (text) {
-      case "new":
-        return "bg-state-danger";
-      case "paid":
-        return "bg-state-info";
-      case "over due":
-        return "bg-state-warning";
-      case "received":
-        return "bg-state-success";
-      default:
-        return "bg-state-ignore";
-    }
+  const statusColors = {
+    New: "#fd1d1d",
+    Deny: "#cecece",
+    Done: "#52c41a",
+    Pending: "#faad14",
+    Processing: "#1890ff",
   };
+
   const [open, setOpen] = useState(false);
 
   const handleMenuClick = ({ key }) => {
@@ -43,17 +37,15 @@ const StatusDropdownButton = ({ text, statusList, record, onChange }) => {
     >
       <div
         onClick={(e) => {
-          // e.preventDefault();
           e.stopPropagation();
         }}
       >
-        <div
-          className={`w-25 h-6 rounded-full text-xs text-text-w font-medium cursor-pointer flex items-center justify-center ${color(
-            text
-          )} hover:bg-neutral-600`}
+        <Tag
+          color={statusColors[text] || "default"}
+          className="line-clamp-1 h-[3rem] text-left"
         >
           {label}
-        </div>
+        </Tag>
       </div>
     </Dropdown>
   );

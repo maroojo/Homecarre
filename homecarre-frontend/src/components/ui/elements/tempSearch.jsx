@@ -29,11 +29,7 @@ const TempSearch = ({
   };
 
   const handleStatusChange = (value) => {
-    if (value.includes("All")) {
-      setStatus(["All"]);
-    } else {
-      setStatus(value.filter((v) => v !== "All"));
-    }
+    setStatus([value]);
   };
 
   const sqlInjection = (rule, value) => {
@@ -73,7 +69,7 @@ const TempSearch = ({
         </Col>
         {pickDate && (
           <Col xs={24} sm={12} md={8} lg={6}>
-            <Form.Item label="Date :" name="date" >
+            <Form.Item label="Date :" name="date">
               <RangePicker
                 value={date}
                 onChange={(value) => setDate(value)}
@@ -85,10 +81,7 @@ const TempSearch = ({
         )}
         {pickStatus && (
           <Col xs={24} sm={12} md={8} lg={6}>
-            <Form.Item
-              label="Status :"
-              name="status"
-            >
+            <Form.Item label="Status :" name="status">
               <Select
                 allowClear
                 placeholder="Select status"

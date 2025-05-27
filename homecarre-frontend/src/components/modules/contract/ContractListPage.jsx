@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
+import { useFromOrigin } from "@/context/FromOriginContext";
 import { hcContract } from "@/services";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./contractComponent/contractColumn";
@@ -32,6 +33,7 @@ const CreateContract = dynamic(
 const ContractListPage = () => {
   const router = useRouter();
   const { getContracts, getContract } = hcContract();
+  const { setFromOrigin } = useFromOrigin();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,6 +85,11 @@ const ContractListPage = () => {
     className: "cursor-pointer",
   });
 
+  const handleClick = (action, hcNo) => {
+    setFromOrigin(action);
+    router.push(`/${hcNo}`);
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     callGetContract(searchKey, page);
@@ -124,7 +131,7 @@ const ContractListPage = () => {
         ]}
       >
         <CtTable
-          columns={columns}
+          columns={columns(handleClick)}
           data={data.data}
           loading={loading}
           onRow={handleRow}

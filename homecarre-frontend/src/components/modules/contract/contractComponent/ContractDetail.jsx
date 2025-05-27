@@ -2,21 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import {
-  Row,
-  Col,
-  Form,
-  Tabs,
-  Input,
-  Card,
-  DatePicker,
-  Typography,
-  message,
-  Upload,
-  Button,
-  Spin,
-} from "antd";
-import { UploadOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { Form, Tabs, Button, Spin } from "antd";
+import { EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { useFromOrigin } from "@/context/FromOriginContext";
 import { hcContract } from "@homecarre-api";
 import InformationTabs from "./InformationForm/InformationTabs";
 
@@ -24,10 +12,11 @@ const ContractDetail = ({ hcId }) => {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
   const { getContractById, updateContract } = hcContract();
+  const { fromOrigin, setFromOrigin } = useFromOrigin();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
-  const [activeTabKey, setActiveTabKey] = useState("1");
+  const [activeTabKey, setActiveTabKey] = useState("info");
   const [tenantCode, setTenantCode] = useState([]);
   const [ownerCode, setOwnerCode] = useState([]);
 
@@ -70,7 +59,8 @@ const ContractDetail = ({ hcId }) => {
     setIsEdit(!isEdit);
   };
 
-  const hideButton = activeTabKey === "4" || activeTabKey === "5";
+  const hideButton = activeTabKey === "pay" || activeTabKey === "req";
+  const tabItems = InformationTabs(form, isEdit);
 
   useEffect(() => {
     form.resetFields();
@@ -78,6 +68,13 @@ const ContractDetail = ({ hcId }) => {
     setIsEdit(false);
     if (hcId) {
       getContract();
+    }
+
+    if (fromOrigin) {
+      setActiveTabKey(fromOrigin);
+      setFromOrigin("info");
+    } else {
+      setActiveTabKey("info");
     }
   }, [hcId]);
 
@@ -88,23 +85,12 @@ const ContractDetail = ({ hcId }) => {
       </div>
       <div className="mt-2">
         <Spin spinning={loading}>
-          <Form
-            form={form}
-            layout="vertical"
-            disabled={!isEdit}
-            initialValues={{
-              dateRange: [
-                data?.date_start ? dayjs(data.date_start, "YYYY-MM-DD") : null,
-                data?.date_end ? dayjs(data.date_end, "YYYY-MM-DD") : null,
-              ],
-            }}
-          >
             <Tabs
-              items={InformationTabs}
-              defaultActiveKey="1"
+              items={tabItems}
+              activeKey={activeTabKey}
               onChange={(key) => setActiveTabKey(key)}
             />
-          </Form>
+
           {!hideButton && (
             <Button
               type="primary"

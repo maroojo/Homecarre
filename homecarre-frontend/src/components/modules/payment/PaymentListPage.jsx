@@ -1,14 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 
-import { Button, Dropdown } from "antd";
+import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
+import useNotification from "@/hooks/useNotification";
+import { useFromOrigin } from "@/context/FromOriginContext";
 import { columns } from "./paymentComponent/paymentColumn";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
-
 import { hcPayment } from "@homecarre-api";
 
 const CoConfirm = dynamic(
@@ -17,13 +19,17 @@ const CoConfirm = dynamic(
 );
 
 const PaymentListPage = () => {
+  const router = useRouter();
   const { getPayment, getPaymentStatus, updatePaymentStatus } = hcPayment();
   const date = dayjs();
   const month = date.format("MMM");
+  const { setFromOrigin } = useFromOrigin();
+  const { isSuccess, error } = useNotification();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
   const [data, setData] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const [openModal, setOpenModal] = useState(false);
@@ -65,25 +71,54 @@ const PaymentListPage = () => {
   const handleSearch = (params) => {
     setSearchKey(params);
     setCurrentPage(1);
+    loadInitialData(params, 1);
+  };
+
+  const handleRow = (record) => {
+      setFromOrigin("pay");
+      router.push(`/${record}`);
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    callGetContract(searchKey, page);
+    loadInitialData({ ...searchKey }, page);
   };
 
   const handleStatusChange = async (paymentId, status) => {
-    console.log("status change", paymentId, status);
-    console.log("status",data.status)
-    setSelectedStatus(status);
+    // console.log("status change", paymentId, status);
+    // console.log("status", data.status);
+    // setSelectedPayment(paymentId);
+    // setSelectedStatus(status);
+    // setOpenModal(true);
+    setLoading(true);
+    try {
+      const response = await updatePaymentStatus(paymentId, status);
+      if (response.isSuccess) {
+        loadInitialData(searchKey, currentPage);
+        isSuccess({
+          message: `Payment status updated to ${status}`,
+          onClose: () => {},
+        });
+      } else {
+        console.error("Failed to update status:", response.message);
+        error({
+          message: `Failed to update status: ${response.message}`,
+          onClose: () => {},
+        });
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleConfirmStatusChange = async () => {
     setOpenModal(false);
-    console.log("save status change", selectedStatus);
+    if (!selectedPayment) return;
     try {
       const response = await updatePaymentStatus(
-        data.payment_no,
+        selectedPayment,
         selectedStatus
       );
       if (response.isSuccess) {
@@ -104,14 +139,14 @@ const PaymentListPage = () => {
   );
 
   useEffect(() => {
-    loadInitialData(searchKey);
-  }, [searchKey]);
+    loadInitialData(searchKey, currentPage);
+  }, []);
 
   return (
     <div>
       <ClTable
         onSearch={<CtSearch onSearch={handleSearch} />}
-        total={data?.total ?? "N/A"}
+        total={total ?? "N/A"}
         rightButton={
           <Button variant="solid">
             <PlusOutlined /> {month}
@@ -143,7 +178,7 @@ const PaymentListPage = () => {
         ]}
       >
         <CtTable
-          columns={columns(paymentStatus, handleStatusChange, setOpenModal)}
+          columns={columns(paymentStatus, handleStatusChange, handleRow)}
           loading={loading}
           data={data}
           rowKey={(record) => record.payment_no}

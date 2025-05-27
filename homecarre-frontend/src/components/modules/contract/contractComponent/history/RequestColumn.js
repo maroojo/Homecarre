@@ -1,15 +1,8 @@
 import { Tag } from "antd";
-import RequestImage from "./RequestImage";
+import RequestImage from "@modules/request/requestComponent/RequestImage";
+import StatusDropdownButton from "@/components/modules/request/requestComponent/statusDropdownButton";
 
-export const columns = [
-  {
-    title: "HC No.",
-    dataIndex: "hc_no",
-    key: "hc_no",
-    render: (text) => (
-      <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
-    ),
-  },
+export const columns = (status = [], onChangeStatus) => [
   {
     title: "Request No.",
     dataIndex: "request_no",
@@ -65,7 +58,7 @@ export const columns = [
     render: (text, record) =>
       text ? (
         <div data-stop-propagation>
-          <RequestImage text={text} hc_no={record.hc_no}/>
+          <RequestImage text={text} hc_no={record.hc_no} />
         </div>
       ) : (
         ""
@@ -76,22 +69,15 @@ export const columns = [
     dataIndex: "request_status",
     key: "request_status",
     className: "w-10",
-    render: (text) => {
-      const statusColors = {
-        New: "#fd1d1d",
-        Deny: "#cecece",
-        Approved: "#52c41a",
-        Pending: "#faad14",
-        Processing: "#1890ff",
-      };
-      return (
-        <Tag
-          color={statusColors[text] || "default"}
-          className="line-clamp-1 h-[3rem] text-left"
-        >
-          {text}
-        </Tag>
-      );
-    },
+    render: (text, record) => (
+      <div data-stop-propagation>
+        <StatusDropdownButton
+          text={text}
+          statusList={status}
+          record={record}
+          onChange={onChangeStatus}
+        />
+      </div>
+    ),
   },
 ];

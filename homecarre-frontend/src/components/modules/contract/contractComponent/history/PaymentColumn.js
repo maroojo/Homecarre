@@ -1,8 +1,8 @@
-import { Space, Button } from "antd";
-import StatusDropdownButton from "./StatusDropdownButton";
-import PaymentImage from "./PaymentImage";
+import { Space, Dropdown } from "antd";
+import StatusDropdownButton from "@modules/payment/paymentComponent/StatusDropdownButton";
+import PaymentImage from "@modules/payment/paymentComponent/PaymentImage";
 
-export const columns = (status = [], onChangeStatus, onMoreClick) => [
+export const columns = (status = [], onChangeStatus) => [
   {
     title: "Payment ID",
     dataIndex: "payment_no",
@@ -10,16 +10,6 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
     className: "w-28",
     render: (text) => (
       <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
-    ),
-  },
-  {
-    title: "HC No.",
-    dataIndex: "hc_no",
-    key: "hcNo",
-    render: (text) => (
-      <div data-clickable className="line-clamp-1 h-[3rem] text-left">
-        {text}
-      </div>
     ),
   },
   {
@@ -32,7 +22,7 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
         { value: record.bank_no },
       ].filter((item) => item.value);
       return (
-        <div data-clickable className="flex flex-col text-xs">
+        <div className="flex flex-col text-xs">
           {details.map((detail, index) => (
             <Space key={index} className="flex items-center gap-1">
               {detail.value}
@@ -48,9 +38,7 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
     key: "amount",
     className: "max-w-48",
     render: (text) => (
-      <div data-clickable className="line-clamp-1 h-[3rem] text-left">
-        {text}
-      </div>
+      <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
     ),
   },
   {
@@ -62,7 +50,7 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
         { value: <div>pay {record.agreement_date_pay}</div> },
       ].filter((item) => item.value);
       return (
-        <div data-clickable className="flex flex-col text-xs">
+        <div className="flex flex-col text-xs">
           {days.map((date, index) => (
             <Space key={index} className="flex items-center gap-1">
               {date.value}
@@ -98,16 +86,6 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
           onChange={onChangeStatus}
         />
       </div>
-    ),
-  },
-  {
-    title: "more",
-    dataIndex: "more",
-    key: "more",
-    render: (_, record) => (
-      <Button type="link" onClick={() => onMoreClick(record.hc_no)}>
-        more
-      </Button>
     ),
   },
 ];

@@ -1,22 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { useFromOrigin } from "@/context/FromOriginContext";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import useNotification from "@/hooks/useNotification";
 import { hcRequest } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
-import { columns } from "./requestComponent/requestColumn";
+import { columns } from "./RequestColumn";
 
-const RequestListPage = () => {
-  const router = useRouter();
-  const { getRepairs } = hcRequest();
-    const { setFromOrigin } = useFromOrigin();
+const Status = [
+  { code: "New", label: "New", colorClass: "bg-red-500" },
+  { code: "Deny", label: "Deny", colorClass: "bg-gray-400" },
+  { code: "Accept", label: "Accept", colorClass: "bg-yellow-400" },
+  { code: "Done", label: "Done", colorClass: "bg-green-500" },
+];
 
+const Request = () => {
+  const { hcID } = useParams();
+  const { getRepairs, updateRepairStatus } = hcRequest();
+
+  const { isSuccess, error } = useNotification();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
@@ -33,12 +38,11 @@ const RequestListPage = () => {
           pageSize
         );
       } else {
-        response = await getRepairs(page, pageSize);
+        response = await getRepairs({ page, pageSize, hc_no: hcID });
       }
       if (response) {
         setData(response);
         setTotal(response.total || 0);
-        console.log(response);
       }
     } catch (error) {
       console.error("API error:", error);
@@ -57,19 +61,32 @@ const RequestListPage = () => {
     callGetRepair(searchKey, page);
   };
 
-  const handleRow = (record) => ({
-    onClick: (e) => {
-      if (
-        e.target.closest("button") ||
-        e.target.closest("[data-stop-propagation]")
-      ) {
-        return;
+  const handleStatusChange = async (Id, status) => {
+    setLoading(true);
+    try {
+      const response = await updateRepairStatus({
+        request_no: Id,
+        status: status,
+      });
+      if (response.isSuccess) {
+        callGetRepair(searchKey, currentPage);
+        isSuccess({
+          message: `Payment status updated to ${status}`,
+          onClose: () => {},
+        });
+      } else {
+        console.error("Error updating status:", response.message);
+                error({
+          message: `Failed to update status: ${response.message}`,
+          onClose: () => {},
+        });
       }
-      setFromOrigin("req");
-      router.push(`/${record.hc_no}`);
-    },
-    className: "cursor-pointer",
-  });
+    } catch (error) {
+      console.error("Error updating status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     callGetRepair(searchKey);
@@ -93,14 +110,14 @@ const RequestListPage = () => {
         }
       >
         <CtTable
-          columns={columns}
+          columns={columns(Status, handleStatusChange)}
           data={tableData}
           loading={loading}
-          onRow={handleRow}
           rowKey={(record) => record.request_no}
         />
       </ClTable>
     </div>
   );
 };
-export default RequestListPage;
+
+export default Request;

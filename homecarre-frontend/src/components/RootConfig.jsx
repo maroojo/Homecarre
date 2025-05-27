@@ -1,10 +1,13 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AuthProvider } from "@/context/AuthContext";
+import { FromOriginProvider } from "@/context/FromOriginContext";
 
 const RootConfig = ({ children }) => {
   return (
     <AuthProvider>
-      <AntdRegistry>{children}</AntdRegistry>
+      <AntdRegistry>
+        <FromOriginProvider>{children}</FromOriginProvider>
+      </AntdRegistry>
     </AuthProvider>
   );
 };

@@ -1,7 +1,7 @@
-import {  Button } from "antd";
-import { MoreOutlined, EditOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 
-export const columns = [
+export const columns = (onActionClick) => [
   {
     title: "HC No.",
     dataIndex: "hc_no",
@@ -91,7 +91,7 @@ export const columns = [
     key: "payment",
     className: "w-12",
     render: (_, record) => (
-      <Button type="link" onClick={() => console.log(record)}>
+      <Button type="link" onClick={() => onActionClick("pay", record.hc_no)}>
         <MoreOutlined className="cursor-pointer p-1" />
       </Button>
     ),
@@ -102,7 +102,7 @@ export const columns = [
     key: "request",
     className: "w-12",
     render: (_, record) => (
-      <Button type="link" onClick={() => console.log(record)}>
+      <Button type="link" onClick={() => onActionClick("req", record.hc_no)}>
         <MoreOutlined className="cursor-pointer p-1" />
       </Button>
     ),
