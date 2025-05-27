@@ -36,12 +36,16 @@ const requestService = () => {
     }
   };
 
-  const updateRepairStatus = async ({ request_no, status }) => {
+  const updateRepairStatus = async (request_no, status) => {
     try {
-      const response = await api("/admin/repair-request/update-status", "POST", {
-        request_no: request_no,
-        status: status,
-      });
+      const response = await api(
+        "/admin/repair-request/update-status",
+        "POST",
+        {
+          request_no: request_no,
+          status: status,
+        }
+      );
       return response;
     } catch (error) {
       console.error("Error updating repair status:", error);
