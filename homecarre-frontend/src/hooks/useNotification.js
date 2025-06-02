@@ -32,7 +32,6 @@ const useNotification = () => {
   };
 
   const error = ({ message, onClose }) => {
-    notification.destroy();
     notification.error({
       message: "Error",
       description: message,

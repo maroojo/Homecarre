@@ -8,7 +8,7 @@ import Document from "./Document";
 import Request from "../history/Request";
 import Payment from "../history/Payment";
 
-const InformationTabs = (form, isEdit) => [
+const InformationTabs = (form, isEdit, hc_no) => [
   {
     key: "info",
     label: "Information",
@@ -30,11 +30,7 @@ const InformationTabs = (form, isEdit) => [
   {
     key: "doc",
     label: "Document",
-    children: (
-      <Form form={form} layout="vertical" disabled={!isEdit}>
-        <Document />
-      </Form>
-    ),
+    children: <Document hcNo={hc_no} />,
   },
   {
     key: "req",

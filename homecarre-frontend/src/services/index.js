@@ -5,6 +5,7 @@ export * as hcAuthentication from "@services/Auth";
 
 // application service
 export { default as hcContract } from "./contract/contractsService";
+export * as hcDocument from "./document";
 export { default as hcPayment } from "./payment/paymentService";
 export { default as hcRequest } from "./request/requestService";
 export { default as hcClient } from "./client/clientService";

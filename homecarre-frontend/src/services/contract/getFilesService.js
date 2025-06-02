@@ -1,12 +1,13 @@
 import api from "@/util/api";
 
-const LogInService = async (body) => {
+const getFilesService = async (id) => {
   try {
-    const response = await api(`/admin/auth/login`, "POST", body);
-    return response;
+    const response = await api(`/admin/document/${id}`,"GET")
+    return response
   } catch (error) {
     console.error("Login error:", error);
     return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
   }
 };
-export default LogInService;
+
+export default getFilesService;

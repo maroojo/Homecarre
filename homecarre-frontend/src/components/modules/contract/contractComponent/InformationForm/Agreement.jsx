@@ -5,7 +5,7 @@ const { Title, Text } = Typography;
 const AgreementTab = () => {
   const { RangePicker } = DatePicker;
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-1/2">
       <Form.Item label="Lease Term" name={"time"}>
         <Input placeholder="Lease Term" type="number" />
       </Form.Item>

@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 
 const DetailTab = () => (
-  <div>
+  <div className="w-1/2">
     <Form.Item label="Homecarre No." name="HCNo">
       <Input disabled />
     </Form.Item>

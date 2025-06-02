@@ -59,8 +59,9 @@ const ContractDetail = ({ hcId }) => {
     setIsEdit(!isEdit);
   };
 
-  const hideButton = activeTabKey === "pay" || activeTabKey === "req";
-  const tabItems = InformationTabs(form, isEdit);
+  const hideButton =
+    activeTabKey === "doc" || activeTabKey === "pay" || activeTabKey === "req";
+  const tabItems = InformationTabs(form, isEdit, hcId);
 
   useEffect(() => {
     form.resetFields();
@@ -81,15 +82,16 @@ const ContractDetail = ({ hcId }) => {
   return (
     <div>
       <div className="flex items-end justify-start gap-4">
-        <h2 className="text-xl font-semibold">Contract Information</h2>
+        <h2 className="text-xl font-semibold">Contract Information : </h2>
+        <p className="text-xl ml-5 font-semibold">{hcId}</p>
       </div>
       <div className="mt-2">
         <Spin spinning={loading}>
-            <Tabs
-              items={tabItems}
-              activeKey={activeTabKey}
-              onChange={(key) => setActiveTabKey(key)}
-            />
+          <Tabs
+            items={tabItems}
+            activeKey={activeTabKey}
+            onChange={(key) => setActiveTabKey(key)}
+          />
 
           {!hideButton && (
             <Button

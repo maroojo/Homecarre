@@ -54,11 +54,10 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
     ),
   },
   {
-    title: "Date",
+    title: "Due Date",
     key: "date",
     render: (_, record) => {
       const days = [
-        { value: <div>schedule {record.schedule_date}</div> },
         { value: <div>pay {record.agreement_date_pay}</div> },
       ].filter((item) => item.value);
       return (
