@@ -105,7 +105,11 @@ const ContractListPage = () => {
         onSearch={<CtSearch onSearch={handleSearch} />}
         total={data?.total ?? "N/A"}
         rightButton={
-          <Button onClick={() => {router.push(`/create`);}}>
+          <Button
+            onClick={() => {
+              router.push(`/create`);
+            }}
+          >
             <PlusOutlined /> add
           </Button>
         }
@@ -118,17 +122,17 @@ const ContractListPage = () => {
             className="mt-4 text-center"
           />
         }
-        modal={[
-          <CoModal
-            key="create-modal"
-            visible={createOpen}
-            onClose={() => setCreateOpen(false)}
-            width={"95%"}
-            maskClos={false}
-          >
-            <CreateContract />
-          </CoModal>,
-        ]}
+        // modal={[
+        //   <CoModal
+        //     key="create-modal"
+        //     visible={createOpen}
+        //     onClose={() => setCreateOpen(false)}
+        //     width={"95%"}
+        //     maskClos={false}
+        //   >
+        //     <CreateContract />
+        //   </CoModal>,
+        // ]}
       >
         <CtTable
           columns={columns(handleClick)}
