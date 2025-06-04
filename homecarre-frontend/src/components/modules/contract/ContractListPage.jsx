@@ -38,7 +38,7 @@ const ContractListPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [createOpen, setCreateOpen] = useState(false);
+  // const [createOpen, setCreateOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -105,7 +105,7 @@ const ContractListPage = () => {
         onSearch={<CtSearch onSearch={handleSearch} />}
         total={data?.total ?? "N/A"}
         rightButton={
-          <Button onClick={() => setCreateOpen(true)}>
+          <Button onClick={() => {router.push(`/create`);}}>
             <PlusOutlined /> add
           </Button>
         }
