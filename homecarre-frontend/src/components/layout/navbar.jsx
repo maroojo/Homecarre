@@ -8,24 +8,36 @@ const Navbar = ({ isOpen }) => {
   const pathname = usePathname();
   const { user } = useAuth();
   const firstPath = pathname?.split("/")[1] || "home";
+  let pathTitle;
 
   const displayPathName = () => {
     if (firstPath.toLowerCase().startsWith("hc")) {
-      return <div className="font-semibold text-2xl capitalize">contract : </div>;
+      return (
+        <div className="font-semibold text-2xl capitalize">contract : </div>
+      );
     } else {
       return firstPath.charAt(0).toUpperCase() + firstPath.slice(1);
     }
   };
 
+  if (firstPath === "home" || "") {
+    pathTitle = "Homecarre";
+  } else if (firstPath === "create") {
+    pathTitle = "create contract";
+  } else {
+    pathTitle = displayPathName();
+  }
+
   return (
     <div className="flex justify-between items-center p-2 px-8 bg-withe w-full text-primary-base shadow-lg">
       <div className="flex items-center">
         <div
-          className={`text-xl font-semibold transition-all duration-300 transform ${
+          className={`text-xl font-semibold transition-all duration-300 transform capitalize${
             isOpen ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
           }`}
         >
-          {firstPath === "home" ? "Homecarre" : displayPathName()}
+          {/* {firstPath === "home" ? "Homecarre" : displayPathName()} */}
+          {pathTitle}
         </div>
       </div>
       <div>
