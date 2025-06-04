@@ -49,7 +49,7 @@ const PaymentService = () => {
   const updatePaymentStatus = async (id, status) => {
     try {
       const response = await api(`/admin/payment-update`, "POST", {
-        payment_id: id,
+        payment_no: id,
         action: status,
       });
       return response.data;
