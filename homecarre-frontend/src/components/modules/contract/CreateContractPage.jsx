@@ -17,7 +17,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 import useNotification from "@/hooks/useNotification";
-import { hcDocument } from "@homecarre-api";
+import { hcContacts } from "@homecarre-api";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -25,7 +25,7 @@ const { Option } = Select;
 const CreateContract = () => {
   const [form] = Form.useForm();
   const router = useRouter();
-  const { createContract } = hcDocument;
+  const { createContract } = hcContacts;
   const { success, error, warning } = useNotification();
 
   const [removingKeys, setRemovingKeys] = useState([]);
@@ -37,6 +37,12 @@ const CreateContract = () => {
       remove(name);
       setRemovingKeys((prev) => prev.filter((key) => key !== name));
     }, 300);
+  };
+
+  const handleAccountChange = (e) => {
+    const rawValue = e.target.value;
+    const cleanedValue = rawValue.replace(/-/g, "");
+    form.setFieldsValue({ account_no: cleanedValue });
   };
 
   const onFinish = async (values) => {
@@ -88,8 +94,8 @@ const CreateContract = () => {
           layout="vertical"
           initialValues={{
             clients: [
-              { fullname: "", telephone: "" },
-              { fullname: "", telephone: "" },
+              { fullname: "", telephone: "", client_type: "owner" },
+              { fullname: "", telephone: "", client_type: "tenant" },
             ],
           }}
         >
@@ -137,7 +143,7 @@ const CreateContract = () => {
             label="Account Number"
             rules={[{ required: true, message: "Please input account number" }]}
           >
-            <Input />
+            <Input onChange={handleAccountChange} />
           </Form.Item>
 
           <Form.Item
@@ -245,8 +251,14 @@ const CreateContract = () => {
                           {...restField}
                           name={[name, "client_type"]}
                           label="Type"
+                          rules={[
+                            { required: true, message: "Please select type" },
+                          ]}
                         >
-                          <Input />
+                          <Select placeholder="Select client type">
+                            <Option value="owner">Owner</Option>
+                            <Option value="tenant">Tenant</Option>
+                          </Select>
                         </Form.Item>
 
                         {index >= 2 && (

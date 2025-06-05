@@ -5,13 +5,14 @@ import dayjs from "dayjs";
 import { Form, Tabs, Button, Spin } from "antd";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useFromOrigin } from "@/context/FromOriginContext";
-import { hcContract } from "@homecarre-api";
+import { hcContract, hcContacts } from "@homecarre-api";
 import InformationTabs from "./InformationForm/InformationTabs";
 
 const ContractDetail = ({ hcId }) => {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
   const { getContractById, updateContract } = hcContract();
+  const { getContract } = hcContacts;
   const { fromOrigin, setFromOrigin } = useFromOrigin();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,19 +21,26 @@ const ContractDetail = ({ hcId }) => {
   const [tenantCode, setTenantCode] = useState([]);
   const [ownerCode, setOwnerCode] = useState([]);
 
-  const getContract = async () => {
+  const getContractId = async () => {
     setLoading(true);
     try {
-      const response = await getContractById(hcId);
+      const response = await getContract(hcId);
       if (response?.data) {
-        // setData(response.data);
+        const { owners = [], tenants = [] } = response.data;
+
+        const ownerNames = owners.map((o) => o.owner_name).join(", ");
+        const tenantNames = tenants.map((t) => t.tenant_name).join(", ");
         setTenantCode(response.data.tenant_code);
         setOwnerCode(response.data.owner_code);
         form.setFieldsValue({
           HCNo: response.data.hc_no,
           propertyCode: response.data.property_code,
-          owner: response.data.owner_name,
-          tenant: response.data.tenant_name,
+          owners: response.data.owners?.length
+            ? response.data.owners
+            : [{ owner_name: "" }],
+          tenants: response.data.tenants?.length
+            ? response.data.tenants
+            : [{ tenant_name: "" }],
           time: response.data.agreement_lease,
           agreementDatePay: response.data.agreement_date_pay,
           rentPrice: response.data.rent_price,
@@ -68,7 +76,7 @@ const ContractDetail = ({ hcId }) => {
     setLoading(true);
     setIsEdit(false);
     if (hcId) {
-      getContract();
+      getContractId();
     }
 
     if (fromOrigin) {

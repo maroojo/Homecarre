@@ -13,7 +13,15 @@ const InformationTabs = (form, isEdit, hc_no) => [
     key: "info",
     label: "Information",
     children: (
-      <Form form={form} layout="vertical" disabled={!isEdit}>
+      <Form
+        form={form}
+        layout="vertical"
+        disabled={!isEdit}
+        initialValues={{
+          owners: [{ owner_name: "" }],
+          tenants: [{ tenant_name: "" }],
+        }}
+      >
         <Information />
       </Form>
     ),

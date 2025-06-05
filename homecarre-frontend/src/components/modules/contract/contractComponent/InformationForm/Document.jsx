@@ -1,20 +1,36 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Form, Input, message, Typography, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import dynamic from "next/dynamic";
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Typography,
+  Upload,
+  Row,
+  Col,
+} from "antd";
+import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 
-import { hcDocument } from "@homecarre-api";
+import { hcContacts } from "@homecarre-api";
 import useNotification from "@/hooks/useNotification";
+
+const CoConfirm = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoConfirm),
+  { ssr: false }
+);
 
 const { Title } = Typography;
 
 const Documents = ({ hcNo }) => {
   const { Dragger } = Upload;
-  const { getFiles, uploadFile } = hcDocument;
+  const { getFiles, uploadFile, deleteFile } = hcContacts;
+  const { success, error, warning } = useNotification();
+  const [fileToDelete, setFileToDelete] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const { success, error, warning } = useNotification();
 
   const uploadProps = {
     beforeUpload: async (file) => {
@@ -62,6 +78,30 @@ const Documents = ({ hcNo }) => {
     }
   };
 
+  const handleConfirmDeleteFile = (file) => {
+    setFileToDelete(file);
+    setOpenModal(true);
+  };
+
+  const handleDelete = async () => {
+    if (!fileToDelete) return;
+
+    const res = await deleteFile({
+      hcNo: hcNo,
+      file: fileToDelete.name,
+    });
+
+    if (res.isSuccess) {
+      success({ message: "ลบไฟล์สำเร็จ" });
+      loadInitialFiles();
+    } else {
+      error({ message: res.message || "ไม่สามารถลบไฟล์ได้" });
+    }
+
+    setOpenModal(false);
+    setFileToDelete(null);
+  };
+
   useEffect(() => {
     loadInitialFiles();
   }, []);
@@ -81,10 +121,41 @@ const Documents = ({ hcNo }) => {
           </p>
         </Dragger>
       </Form.Item>
-      <Upload
-        fileList={documents}
-        showUploadList={{ showRemoveIcon: false }} // ปิดลบถ้าไม่ต้องการให้ลบ
-        disabled // ปิดการอัปโหลดใหม่
+      <Col span={10}>
+        <div>
+          {documents.map((file) => (
+            <div
+              key={file.uid}
+              className="flex items-center justify-between mb-2 pl-3 rounded-full hover:bg-primary-50 "
+            >
+              <a href={file.url} target="_blank" rel="noopener noreferrer">
+                {file.name}
+              </a>
+              <div className="flex-1 border-b border-dashed border-accent mx-2"></div>
+              <Button
+                onClick={() => {
+                  setFileToDelete(file);
+                  setOpenModal(true);
+                }}
+              >
+                <DeleteOutlined />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Col>
+      <CoConfirm
+        visible={openModal}
+        onClose={() => setOpenModal(false)}
+        closable={true}
+        onConfirm={handleDelete}
+        confirmText="ลบไฟล์"
+        cancelText="ยกเลิก"
+        title="ยืนยันการลบไฟล์"
+        message={`คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์ "${fileToDelete?.name}"`}
+        iconModal="/logoHomeCarre.png"
+        width={400}
+        maskClosable={true}
       />
     </div>
   );

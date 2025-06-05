@@ -152,6 +152,10 @@
   font-size: 16px !important;
 }
 
+.always-show-remove .ant-upload-list-item-actions {
+  opacity: 1 !important;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   width: 0px;
   height: 0px;

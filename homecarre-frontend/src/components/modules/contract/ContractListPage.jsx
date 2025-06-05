@@ -8,6 +8,7 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import { useFromOrigin } from "@/context/FromOriginContext";
 import { hcContract } from "@/services";
+import { hcContacts } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./contractComponent/contractColumn";
 
@@ -33,6 +34,7 @@ const CreateContract = dynamic(
 const ContractListPage = () => {
   const router = useRouter();
   const { getContracts, getContract } = hcContract();
+  const { getContractList } = hcContacts;
   const { setFromOrigin } = useFromOrigin();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
   const [data, setData] = useState([]);
@@ -49,14 +51,14 @@ const ContractListPage = () => {
     try {
       let response;
       if (searchParams.keyword || searchParams.date) {
-        response = await getContract(
+        response = await getContractList(
           searchParams.keyword,
           searchParams.date || [],
           page,
           pageSize
         );
       } else {
-        response = await getContracts(page, pageSize);
+        response = await getContractList(page, pageSize);
       }
 
       if (response) {
@@ -122,17 +124,6 @@ const ContractListPage = () => {
             className="mt-4 text-center"
           />
         }
-        // modal={[
-        //   <CoModal
-        //     key="create-modal"
-        //     visible={createOpen}
-        //     onClose={() => setCreateOpen(false)}
-        //     width={"95%"}
-        //     maskClos={false}
-        //   >
-        //     <CreateContract />
-        //   </CoModal>,
-        // ]}
       >
         <CtTable
           columns={columns(handleClick)}
