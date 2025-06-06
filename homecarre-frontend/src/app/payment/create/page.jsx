@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import { PaCreatePayment } from "@homecarre-modules";
 
 const PaymentCreatePage = () => {
   return (
-    <div>PaymentCreatePage</div>
-  )
-}
+    <div>
+      <PaCreatePayment />
+    </div>
+  );
+};
 
-export default PaymentCreatePage
+export default PaymentCreatePage;
