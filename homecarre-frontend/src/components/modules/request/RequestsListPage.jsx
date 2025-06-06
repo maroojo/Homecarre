@@ -11,9 +11,10 @@ import { columns } from "./requestComponent/requestColumn";
 const RequestListPage = () => {
   const router = useRouter();
   const { getRepairs } = hcRequest();
-    const { setFromOrigin } = useFromOrigin();
+  const { setFromOrigin } = useFromOrigin();
 
-  const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
+  const [searchKey, setSearchKey] = useState("");
+  const [dateRange, setDateRange] = useState([]);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -23,18 +24,14 @@ const RequestListPage = () => {
 
   const callGetRepair = async (searchParams, page = 1) => {
     setLoading(true);
+    console.log("page", page);
     try {
-      let response;
-      if (searchParams.keyword || searchParams.date) {
-        response = await getRepairs(
-          searchParams.keyword,
-          searchParams.date || [],
-          page,
-          pageSize
-        );
-      } else {
-        response = await getRepairs(page, pageSize);
-      }
+      const response = await getRepairs({
+        keyword: searchParams.keyword || null,
+        dateRange: searchParams.date || [],
+        page: page,
+        pagesize: pageSize,
+      });
       if (response) {
         setData(response);
         setTotal(response.total || 0);
@@ -48,11 +45,13 @@ const RequestListPage = () => {
   };
 
   const handleSearch = (params) => {
-    setSearchKey(params);
+    setSearchKey(params.keyword);
+    setDateRange(params.date);
     setCurrentPage(1);
   };
 
   const handlePageChange = (page) => {
+    console.log("click", page);
     setCurrentPage(page);
     callGetRepair(searchKey, page);
   };
@@ -72,8 +71,8 @@ const RequestListPage = () => {
   });
 
   useEffect(() => {
-    callGetRepair(searchKey);
-  }, [searchKey]);
+    callGetRepair({ searchKey, date: dateRange });
+  }, [searchKey, dateRange]);
 
   const tableData = data ? data.data : [];
 

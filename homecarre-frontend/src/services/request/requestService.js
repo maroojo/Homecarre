@@ -18,6 +18,7 @@ const requestService = () => {
       ? dayjs(dateRange[1]).format("YYYY-MM-DD")
       : null;
     try {
+      console.log("sand", page);
       const response = await api(
         (() => {
           let url = `/r/getrepair?page=${page}&pagesize=${pagesize}`;

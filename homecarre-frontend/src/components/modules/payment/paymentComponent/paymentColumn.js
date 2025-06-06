@@ -58,7 +58,7 @@ export const columns = (status = [], onChangeStatus, onMoreClick) => [
     key: "date",
     render: (_, record) => {
       const days = [
-        { value: <div>pay {record.agreement_date_pay}</div> },
+        { value: <div>{record.agreement_date_pay}</div> },
       ].filter((item) => item.value);
       return (
         <div data-clickable className="flex flex-col text-xs">
