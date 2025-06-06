@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Form,
   Input,
@@ -9,19 +9,35 @@ import {
   Select,
   Button,
   message,
+  AutoComplete,
 } from "antd";
 import dayjs from "dayjs";
+import debounce from "lodash/debounce";
 
-import { hcPayments } from "@homecarre-api";
+import { hcPayments, hcContacts } from "@homecarre-api";
 
 const { TextArea } = Input;
 
 const CreateFromPaymentPage = () => {
   const [form] = Form.useForm();
   const { createOne, typePayment } = hcPayments;
+  const { searchHcNo } = hcContacts;
 
+  const [hcNoOptions, setHcNoOptions] = useState([]);
   const [paymentTypes, setPaymentTypes] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleSearchHcNo = useMemo(
+    () =>
+      debounce(async (value) => {
+        if (!value || value.length < 2) return;
+        const response = await searchHcNo(value);
+        if (response?.isSuccess) {
+          setHcNoOptions(response.data.map((hc_no) => ({ value: hc_no })));
+        }
+      }, 200),
+    []
+  );
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -29,6 +45,7 @@ const CreateFromPaymentPage = () => {
     const payload = {
       ...values,
       due_date: dayjs(values.due_date).format("YYYY-MM-DD"),
+      payment_month: dayjs(values.payment_month).format("YYYY-MM"),
     };
 
     const response = await createOne(payload);
@@ -69,47 +86,57 @@ const CreateFromPaymentPage = () => {
       onFinish={onFinish}
       initialValues={{
         rent_price: 0,
-        payment_month: dayjs().format("YYYY-MM"),
+        payment_month: dayjs(),
       }}
     >
       <Form.Item
-        label="รหัสบ้าน (HC No.)"
+        label="Homecarre No. (HC No.)"
         name="hc_no"
-        rules={[{ required: true, message: "กรุณากรอกรหัสบ้าน" }]}
+        rules={[{ required: true, message: "please input Homecarre No." }]}
       >
-        <Input placeholder="เช่น HC-000114" />
+        <AutoComplete
+          options={hcNoOptions}
+          onSearch={handleSearchHcNo}
+          placeholder="exam : HC-000114"
+          style={{ width: "100%" }}
+        />
       </Form.Item>
 
       <Form.Item
-        label="ราคาเช่า"
+        label="amount"
         name="rent_price"
-        rules={[{ required: true, message: "กรุณาระบุราคาเช่า" }]}
+        rules={[{ required: true, message: "Specify Amount" }]}
       >
         <InputNumber min={0} style={{ width: "100%" }} />
       </Form.Item>
 
       <Form.Item
-        label="วันที่ครบกำหนด"
+        label="Due Date"
         name="due_date"
-        rules={[{ required: true, message: "กรุณาเลือกวันที่ครบกำหนด" }]}
+        rules={[{ required: true, message: "please select due date" }]}
       >
-        <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+        <DatePicker style={{ width: "100%" }} format="DD-MM-YYYY" />
       </Form.Item>
 
       <Form.Item
-        label="เดือนที่ชำระ (รูปแบบ: YYYY-MM)"
+        label="for month"
         name="payment_month"
-        rules={[{ required: true, message: "กรุณาระบุเดือนที่ชำระ" }]}
+        rules={[{ required: true, message: "please input month" }]}
       >
-        <Input placeholder="เช่น 2025-06" />
+        <DatePicker
+          picker="month"
+          format="MM-YYYY"
+          style={{ width: "100%" }}
+          placeholder="exam : 2025-06"
+        />
       </Form.Item>
 
       <Form.Item
-        label="ประเภทการชำระเงิน"
+        label="Payment Types"
         name="payment_types_id"
-        rules={[{ required: true, message: "กรุณาเลือกประเภทการชำระเงิน" }]}
+        rules={[{ required: true, message: "please select type" }]}
       >
-        <Select placeholder="เลือกประเภท">
+        <Select placeholder="select">
           {paymentTypes.map((type) => (
             <Select.Option key={type.id} value={type.id}>
               {type.type_label}
@@ -118,13 +145,13 @@ const CreateFromPaymentPage = () => {
         </Select>
       </Form.Item>
 
-      <Form.Item label="หมายเหตุ" name="payment_note">
+      <Form.Item label="note" name="payment_note">
         <Input.TextArea rows={3} />
       </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>
-          สร้างการชำระเงิน
+          Create Billing
         </Button>
       </Form.Item>
     </Form>
