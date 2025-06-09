@@ -24,7 +24,7 @@ const PaymentListPage = () => {
   const date = dayjs();
   const month = date.format("MMM");
   const { setFromOrigin } = useFromOrigin();
-  const { isSuccess, error } = useNotification();
+  const { success, error } = useNotification();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
   const [data, setData] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
@@ -40,14 +40,18 @@ const PaymentListPage = () => {
 
   const loadInitialData = async (searchParams, page = 1) => {
     setLoading(true);
+    console.log("click", page);
     try {
       const keyword = searchParams?.keyword || "";
       const dateRange = searchParams?.date || [];
-      const searchKey = keyword || dateRange.length > 0;
+      console.log("sand", page);
 
-      const paymentProm = searchKey
-        ? getPayment(keyword, dateRange, page, pageSize)
-        : getPayment(page, pageSize);
+      const paymentProm = getPayment({
+        keyword: keyword,
+        dateRange: dateRange,
+        page: page,
+        pagesize: pageSize,
+      });
 
       const statusSync = getPaymentStatus();
 
@@ -75,27 +79,22 @@ const PaymentListPage = () => {
   };
 
   const handleRow = (record) => {
-      setFromOrigin("pay");
-      router.push(`/${record}`);
+    setFromOrigin("pay");
+    router.push(`/${record}`);
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    loadInitialData({ ...searchKey }, page);
+    loadInitialData(searchKey, page);
   };
 
   const handleStatusChange = async (paymentId, status) => {
-    // console.log("status change", paymentId, status);
-    // console.log("status", data.status);
-    // setSelectedPayment(paymentId);
-    // setSelectedStatus(status);
-    // setOpenModal(true);
     setLoading(true);
     try {
       const response = await updatePaymentStatus(paymentId, status);
       if (response.isSuccess) {
         loadInitialData(searchKey, currentPage);
-        isSuccess({
+        success({
           message: `Payment status updated to ${status}`,
           onClose: () => {},
         });

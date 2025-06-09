@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Row, Col } from "antd";
-import PaymentCard from "./PaymentCard";
 import { hcPayment } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./PaymentColumn";
+import useNotification from "@/hooks/useNotification";
 
 const Payment = () => {
   const { hcID } = useParams();
   const { getPayment, getPaymentStatus, updatePaymentStatus } = hcPayment();
+  const { success, error } = useNotification();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
   const [data, setData] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState([]);
@@ -22,7 +22,6 @@ const Payment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
-
 
   const loadInitialData = async (searchParams, page = 1) => {
     setLoading(true);
@@ -78,10 +77,27 @@ const Payment = () => {
   };
 
   const handleStatusChange = async (paymentId, status) => {
-    console.log("status change", paymentId, status);
-    console.log("status", data.status);
-    setSelectedPayment(paymentId);
-    setSelectedStatus(status);
+    setLoading(true);
+    try {
+      const response = await updatePaymentStatus(paymentId, status);
+      if (response.isSuccess) {
+        loadInitialData(searchKey, currentPage);
+        success({
+          message: `Payment status updated to ${status}`,
+          onClose: () => {},
+        });
+      } else {
+        console.error("Failed to update status:", response.message);
+        error({
+          message: `Failed to update status: ${response.message}`,
+          onClose: () => {},
+        });
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -104,11 +120,6 @@ const Payment = () => {
             <CtSearch onSearch={handleSearch} statusOptions={searchStatus} />
           }
           total={total ?? "N/A"}
-          // rightButton={
-          //   <Button variant="solid">
-          //     <PlusOutlined /> {month}
-          //   </Button>
-          // }
           pagination={
             <CtPagination
               default={currentPage}

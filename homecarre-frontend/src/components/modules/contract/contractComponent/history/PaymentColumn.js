@@ -1,10 +1,10 @@
-import { Space, Dropdown } from "antd";
+import { Space } from "antd";
 import StatusDropdownButton from "@modules/payment/paymentComponent/StatusDropdownButton";
 import PaymentImage from "@modules/payment/paymentComponent/PaymentImage";
 
 export const columns = (status = [], onChangeStatus) => [
   {
-    title: "Payment ID",
+    title: "Payment No.",
     dataIndex: "payment_no",
     key: "id",
     className: "w-28",

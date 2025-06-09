@@ -55,6 +55,35 @@ const requestService = () => {
     }
   };
 
-  return { getRepairs, updateRepairStatus };
+  const getRequestStatus = async () => {
+    try {
+      const response = await api("/admin/request/statuses", "GET");
+      return response;
+    } catch (error) {
+      console.error("Error setting favorite:", error);
+      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
+    }
+  };
+
+  const updateRequestStatus = async (request_no, status) => {
+    try {
+      console.log("set", request_no, status);
+      const response = await api("/admin/request/change-status", "POST", {
+        repair_no: request_no,
+        status,
+      });
+      return response;
+    } catch (error) {
+      console.error("Error setting favorite:", error);
+      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
+    }
+  };
+
+  return {
+    getRepairs,
+    updateRepairStatus,
+    getRequestStatus,
+    updateRequestStatus,
+  };
 };
 export default requestService;

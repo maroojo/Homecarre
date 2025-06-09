@@ -5,15 +5,17 @@ import dayjs from "dayjs";
 import { Form, Tabs, Button, Spin } from "antd";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useFromOrigin } from "@/context/FromOriginContext";
-import { hcContract, hcContacts } from "@homecarre-api";
+import { hcContacts } from "@homecarre-api";
 import InformationTabs from "./InformationForm/InformationTabs";
+import useNotification from "@/hooks/useNotification";
 
 const ContractDetail = ({ hcId }) => {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
-  const { getContractById, updateContract } = hcContract();
-  const { getContract } = hcContacts;
+  // const { getContractById, updateContract } = hcContract();
+  const { getContract, updateContract } = hcContacts;
   const { fromOrigin, setFromOrigin } = useFromOrigin();
+  const { success, error } = useNotification();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
@@ -60,11 +62,51 @@ const ContractDetail = ({ hcId }) => {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      const values = await form.validateFields();
+      const data = {
+        hc_no: values.HCNo,
+        property_code: values.propertyCode,
+        date_start: values.dateRange?.[0]?.format("YYYY-MM-DD"),
+        date_end: values.dateRange?.[1]?.format("YYYY-MM-DD"),
+        agreement_lease: Number(values.time),
+        agreement_date_pay: Number(values.agreementDatePay),
+        rent_price: Number(values.rentPrice),
+        bank: values.bank,
+        account_name: values.accountName,
+        account_no: values.accountNo,
+        owners: values.owners || [],
+        tenants: values.tenants || [],
+      };
+
+      const response = await updateContract(data);
+
+      if (response?.isSuccess) {
+        setIsEdit(false);
+        getContractId();
+        success({
+          message: `Contract updated to successfully`,
+          onClose: () => {},
+        });
+      } else {
+        console.error("Update failed:", response?.message);
+        error({
+          message: `Failed to update status: ${response.message}`,
+          onClose: () => {},
+        });
+      }
+    } catch (err) {
+      console.error("Validation or Update Error:", err);
+    }
+  };
+
   const toggleEdit = () => {
     if (isEdit) {
-      // handleSave();
+      handleSave();
+    } else {
+      setIsEdit(true);
     }
-    setIsEdit(!isEdit);
   };
 
   const hideButton =

@@ -65,7 +65,7 @@ export const columns = [
     render: (text, record) =>
       text ? (
         <div data-stop-propagation>
-          <RequestImage text={text} hc_no={record.hc_no}/>
+          <RequestImage text={text} hc_no={record.hc_no} />
         </div>
       ) : (
         ""
@@ -86,6 +86,7 @@ export const columns = [
       };
       return (
         <Tag
+          data-stop-propagation
           color={statusColors[text] || "default"}
           className="line-clamp-1 h-[3rem] text-left"
         >

@@ -9,7 +9,7 @@ const PaymentService = () => {
     hc_no = null,
     status = null,
     sortBy = "payment_no",
-    sortOrder = "DESC"
+    sortOrder = "DESC",
   }) => {
     const startDate = dateRange?.[0]
       ? dayjs(dateRange[0]).format("YYYY-MM-DD")
@@ -17,7 +17,9 @@ const PaymentService = () => {
     const endDate = dateRange?.[1]
       ? dayjs(dateRange[1]).format("YYYY-MM-DD")
       : null;
+
     try {
+      console.log("get", page);
       const response = await api(
         (() => {
           let url = `/admin/payments?page=${page}&pagesize=${pagesize}`;
@@ -48,11 +50,11 @@ const PaymentService = () => {
 
   const updatePaymentStatus = async (id, status) => {
     try {
-      const response = await api(`/admin/payment-update`, "POST", {
+      const response = await api(`/admin/payment/payment-update`, "POST", {
         payment_no: id,
         action: status,
       });
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error setting favorite:", error);
       return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };

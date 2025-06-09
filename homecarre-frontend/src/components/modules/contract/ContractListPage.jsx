@@ -112,7 +112,7 @@ const ContractListPage = () => {
               router.push(`/create`);
             }}
           >
-            <PlusOutlined /> add
+            <PlusOutlined /> create 
           </Button>
         }
         pagination={

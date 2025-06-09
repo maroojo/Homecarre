@@ -13,7 +13,7 @@ const StatusDropdownButton = ({ text, statusList, record, onChange }) => {
   const [open, setOpen] = useState(false);
 
   const handleMenuClick = ({ key }) => {
-    onChange(record.payment_no, key);
+    onChange(record.request_no, key);
   };
 
   const handleOnClick = () => {

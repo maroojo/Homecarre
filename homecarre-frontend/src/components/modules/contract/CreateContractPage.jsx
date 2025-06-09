@@ -12,6 +12,8 @@ import {
   Select,
   Typography,
   Spin,
+  Row,
+  Col,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -87,210 +89,249 @@ const CreateContract = () => {
   return (
     <div>
       <Spin spinning={loading} tip="Creating...">
-        <Form
-          form={form}
-          name="propertyForm"
-          onFinish={onFinish}
-          layout="vertical"
-          initialValues={{
-            clients: [
-              { fullname: "", telephone: "", client_type: "owner" },
-              { fullname: "", telephone: "", client_type: "tenant" },
-            ],
-          }}
-        >
-          <Typography.Title level={4}>Property Info</Typography.Title>
-
-          <Form.Item name="property_code" label="Property Code">
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="property_name"
-            label="Property Name"
-            rules={[{ required: true, message: "Please input property name" }]}
+        <Row>
+          <Form
+            form={form}
+            name="propertyForm"
+            onFinish={onFinish}
+            layout="vertical"
+            initialValues={{
+              clients: [
+                { fullname: "", telephone: "", client_type: "owner" },
+                { fullname: "", telephone: "", client_type: "tenant" },
+              ],
+            }}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="address" label="Address">
-            <Input.TextArea />
-          </Form.Item>
-
-          <Form.Item name="type" label="Type">
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="rent_price"
-            label="Rent Price"
-            type="numeric"
-            rules={[{ required: true, message: "Please input rent price" }]}
-          >
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-
-          <Form.Item
-            name="bank"
-            label="Bank"
-            rules={[{ required: true, message: "Please input bank name" }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="account_no"
-            label="Account Number"
-            rules={[{ required: true, message: "Please input account number" }]}
-          >
-            <Input onChange={handleAccountChange} />
-          </Form.Item>
-
-          <Form.Item
-            name="account_name"
-            label="Account Name"
-            rules={[{ required: true, message: "Please input account name" }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="date_start"
-            label="Start Date"
-            rules={[{ required: true, message: "Please select start date" }]}
-          >
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
-
-          <Form.Item
-            name="date_end"
-            label="End Date"
-            rules={[{ required: true, message: "Please select end date" }]}
-          >
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
-
-          <Form.Item
-            name="agreement_lease"
-            label="Agreement Lease"
-            rules={[
-              { required: true, message: "Please input agreement lease" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="agreement_date_pay"
-            label="Agreement Pay Date"
-            rules={[
-              { required: true, message: "Please input agreement pay date" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Typography.Title level={4}>Clients</Typography.Title>
-          <Form.List
-            name="clients"
-            rules={[
-              {
-                validator: async (_, clients) => {
-                  if (!clients || clients.length < 1) {
-                    return Promise.reject(new Error("At least one client"));
-                  }
-                },
-              },
-            ]}
-          >
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }, index) => {
-                  const isRemoving = removingKeys.includes(name);
-                  return (
-                    <div
-                      key={key}
-                      className={`transition-all duration-300 ease-in-out ${
-                        isRemoving
-                          ? "opacity-0 -translate-y-4"
-                          : "opacity-100 translate-y-0"
-                      }`}
-                    >
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="start"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={[name, "client_code"]}
-                          label="Client Code"
-                        >
-                          <Input placeholder="Optional" />
-                        </Form.Item>
-
-                        <Form.Item
-                          {...restField}
-                          name={[name, "fullname"]}
-                          label="Full Name"
-                          rules={[{ required: true, message: "Required" }]}
-                        >
-                          <Input />
-                        </Form.Item>
-
-                        <Form.Item
-                          {...restField}
-                          name={[name, "telephone"]}
-                          label="Telephone"
-                          rules={[{ required: true, message: "Required" }]}
-                        >
-                          <Input />
-                        </Form.Item>
-
-                        <Form.Item
-                          {...restField}
-                          name={[name, "client_type"]}
-                          label="Type"
-                          rules={[
-                            { required: true, message: "Please select type" },
-                          ]}
-                        >
-                          <Select placeholder="Select client type">
-                            <Option value="owner">Owner</Option>
-                            <Option value="tenant">Tenant</Option>
-                          </Select>
-                        </Form.Item>
-
-                        {index >= 2 && (
-                          <MinusCircleOutlined
-                            onClick={() => remove(name)}
-                            style={{ marginTop: 30 }}
-                          />
-                        )}
-                      </Space>
-                    </div>
-                  );
-                })}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                  >
-                    Add Client
-                  </Button>
+            <Typography.Title level={4}>Property Info</Typography.Title>
+            <Row gutter={16}>
+              <Col span={5}>
+                <Form.Item name="property_code" label="Property Code">
+                  <Input />
                 </Form.Item>
-              </>
-            )}
-          </Form.List>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="property_name"
+                  label="Property Name"
+                  rules={[
+                    { required: true, message: "Please input property name" },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={7}>
+                <Form.Item name="type" label="Type">
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item name="address" label="Address">
+                  <Input.TextArea />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Typography.Title level={4}>Agreement</Typography.Title>
+            <Row gutter={16}>
+              <Col span={6}>
+                <Form.Item
+                  name="date_start"
+                  label="Start Date"
+                  rules={[
+                    { required: true, message: "Please select start date" },
+                  ]}
+                >
+                  <DatePicker style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  name="date_end"
+                  label="End Date"
+                  rules={[
+                    { required: true, message: "Please select end date" },
+                  ]}
+                >
+                  <DatePicker style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  name="agreement_lease"
+                  label="Agreement Lease"
+                  rules={[
+                    { required: true, message: "Please input agreement lease" },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  name="agreement_date_pay"
+                  label="Agreement Pay Date"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input agreement pay date",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Typography.Title level={4}>Transfer To</Typography.Title>
+            <Row gutter={16}>
+              <Col span={4}>
+                <Form.Item
+                  name="rent_price"
+                  label="Rent Price"
+                  type="numeric"
+                  rules={[
+                    { required: true, message: "Please input rent price" },
+                  ]}
+                >
+                  <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+              <Col span={7}>
+                <Form.Item
+                  name="bank"
+                  label="Bank"
+                  rules={[
+                    { required: true, message: "Please input bank name" },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={7}>
+                <Form.Item
+                  name="account_no"
+                  label="Account Number"
+                  rules={[
+                    { required: true, message: "Please input account number" },
+                  ]}
+                >
+                  <Input onChange={handleAccountChange} />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  name="account_name"
+                  label="Account Name"
+                  rules={[
+                    { required: true, message: "Please input account name" },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit Form
-            </Button>
-          </Form.Item>
-        </Form>
+            <Typography.Title level={4}>Clients</Typography.Title>
+            <Form.List
+              name="clients"
+              rules={[
+                {
+                  validator: async (_, clients) => {
+                    if (!clients || clients.length < 1) {
+                      return Promise.reject(new Error("At least one client"));
+                    }
+                  },
+                },
+              ]}
+            >
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }, index) => {
+                    const isRemoving = removingKeys.includes(name);
+                    return (
+                      <div
+                        key={key}
+                        className={`transition-all duration-300 ease-in-out ${
+                          isRemoving
+                            ? "opacity-0 -translate-y-4"
+                            : "opacity-100 translate-y-0"
+                        }`}
+                      >
+                        <Space
+                          key={key}
+                          style={{ display: "flex", marginBottom: 8 }}
+                          align="start"
+                        >
+                          <Form.Item
+                            {...restField}
+                            name={[name, "client_code"]}
+                            label="Client Code"
+                          >
+                            <Input placeholder="Optional" />
+                          </Form.Item>
+
+                          <Form.Item
+                            {...restField}
+                            name={[name, "fullname"]}
+                            label="Full Name"
+                            rules={[{ required: true, message: "Required" }]}
+                          >
+                            <Input />
+                          </Form.Item>
+
+                          <Form.Item
+                            {...restField}
+                            name={[name, "telephone"]}
+                            label="Telephone"
+                            rules={[{ required: true, message: "Required" }]}
+                          >
+                            <Input />
+                          </Form.Item>
+
+                          <Form.Item
+                            {...restField}
+                            name={[name, "client_type"]}
+                            label="Type"
+                            rules={[
+                              { required: true, message: "Please select type" },
+                            ]}
+                          >
+                            <Select placeholder="Select client type">
+                              <Option value="owner">Owner</Option>
+                              <Option value="tenant">Tenant</Option>
+                            </Select>
+                          </Form.Item>
+
+                          {index >= 2 && (
+                            <MinusCircleOutlined
+                              onClick={() => remove(name)}
+                              style={{ marginTop: 30 }}
+                            />
+                          )}
+                        </Space>
+                      </div>
+                    );
+                  })}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Client
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit Form
+              </Button>
+            </Form.Item>
+          </Form>
+        </Row>
       </Spin>
     </div>
   );

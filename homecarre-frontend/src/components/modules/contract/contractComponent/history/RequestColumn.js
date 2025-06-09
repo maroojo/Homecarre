@@ -1,6 +1,6 @@
 import { Tag } from "antd";
 import RequestImage from "@modules/request/requestComponent/RequestImage";
-import StatusDropdownButton from "@/components/modules/request/requestComponent/statusDropdownButton";
+import StatusDropdownButton from "@modules/request/requestComponent/statusDropdownButton";
 
 export const columns = (status = [], onChangeStatus) => [
   {

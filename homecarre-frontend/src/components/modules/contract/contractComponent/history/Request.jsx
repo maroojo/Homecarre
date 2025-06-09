@@ -6,6 +6,7 @@ import useNotification from "@/hooks/useNotification";
 import { hcRequest } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./RequestColumn";
+import { useStatus } from "@/context/initialConfigContext";
 
 const Status = [
   { code: "New", label: "New", colorClass: "bg-red-500" },
@@ -16,9 +17,10 @@ const Status = [
 
 const Request = () => {
   const { hcID } = useParams();
-  const { getRepairs, updateRepairStatus } = hcRequest();
+  const { statusRequest } = useStatus();
+  const { getRepairs, updateRepairStatus, updateRequestStatus } = hcRequest();
 
-  const { isSuccess, error } = useNotification();
+  const { success, error } = useNotification();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,18 +63,19 @@ const Request = () => {
     callGetRepair(searchKey, page);
   };
 
-  const handleStatusChange = async (Id, status) => {
+  const handleStatusChange = async (requestId, status) => {
+    console.log("set", requestId, status);
     setLoading(true);
     try {
-      const response = await updateRepairStatus({
-        request_no: Id,
+      const response = await updateRequestStatus({
+        request_no: requestId,
         status: status,
       });
       console.log("response", response);
       if (response.isSuccess) {
         callGetRepair(searchKey, currentPage);
-        isSuccess({
-          message: `Payment status updated to ${status}`,
+        success({
+          message: `Request status updated to ${status}`,
           onClose: () => {},
         });
       } else {
@@ -111,7 +114,7 @@ const Request = () => {
         }
       >
         <CtTable
-          columns={columns(Status, handleStatusChange)}
+          columns={columns(statusRequest, handleStatusChange)}
           data={tableData}
           loading={loading}
           rowKey={(record) => record.request_no}

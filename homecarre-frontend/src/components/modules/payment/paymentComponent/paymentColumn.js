@@ -4,7 +4,7 @@ import PaymentImage from "./PaymentImage";
 
 export const columns = (status = [], onChangeStatus, onMoreClick) => [
   {
-    title: "Payment ID",
+    title: "Payment No.",
     dataIndex: "payment_no",
     key: "id",
     className: "w-28",
