@@ -15,10 +15,10 @@
   --color-primary-950: #45001a;
 
   /* element */
-  --color-accent: #6BC7C2;
-  --color-surface: #FAF5FA;
+  --color-accent: #6bc7c2;
+  --color-surface: #faf5fa;
   --color-background: #ffffff;
-  --color-border: #EAEAEA;
+  --color-border: #eaeaea;
   --color-text-b: #000000;
   --color-text-w: #ffffff;
 
@@ -147,10 +147,26 @@
 .ant-select-selector {
   border-radius: 9999px !important;
   padding: 4px 12px !important;
-  height: 1.3rem !important;
+  height: 1.6rem !important;
   width: 7rem !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
 }
+
+.ant-input {
+  border-radius: 9999px !important;
+}
+
+.ant-picker {
+  border-radius: 9999px !important;
+}
+
+.ant-upload.ant-upload-drag {
+
+  border-radius: 99px !important;
+
+  transition: border-color 0.3s ease;
+}
+
 
 .always-show-remove .ant-upload-list-item-actions {
   opacity: 1 !important;

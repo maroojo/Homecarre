@@ -4,14 +4,27 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 const DetailTab = () => (
   <div className="w-1/2">
     <Row gutter={16} className="w-full">
-      <Col span={12}>
+      <Col span={5}>
         <Form.Item label="Homecarre No." name="HCNo">
           <Input disabled />
         </Form.Item>
       </Col>
-      <Col span={11}>
+      <Col span={5}>
         <Form.Item label="Property Code" name="propertyCode">
           <Input disabled />
+        </Form.Item>
+      </Col>
+      <Col span={13}>
+        <Form.Item
+          name="propertyName"
+          label="Property Name"
+        >
+          <Input />
+        </Form.Item>
+      </Col>
+      <Col span={23}>
+        <Form.Item name="propertyDetail" label="Address">
+          <Input.TextArea />
         </Form.Item>
       </Col>
     </Row>
@@ -58,7 +71,7 @@ const DetailTab = () => (
           </Row>
           <Form.Item>
             <Row justify="end">
-              <Col span={3} pull={2}>
+              <Col span={3}>
                 <Button
                   type="dashed"
                   onClick={() => add()}
@@ -115,7 +128,7 @@ const DetailTab = () => (
           </Row>
           <Form.Item>
             <Row justify="end">
-              <Col span={3} pull={2}>
+              <Col span={3} >
                 <Button
                   type="dashed"
                   onClick={() => add()}

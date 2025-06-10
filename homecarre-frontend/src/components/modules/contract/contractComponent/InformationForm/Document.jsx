@@ -15,6 +15,7 @@ import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import { hcContacts } from "@homecarre-api";
 import useNotification from "@/hooks/useNotification";
+import { Color } from "antd/es/color-picker";
 
 const CoConfirm = dynamic(
   () => import("@homecarre-ui").then((mod) => mod.CoConfirm),
@@ -110,7 +111,9 @@ const Documents = ({ hcNo }) => {
       <Form.Item>
         <Dragger {...uploadProps} fileList={[]}>
           <p className="ant-upload-drag-icon">
-            <UploadOutlined />
+            <UploadOutlined
+              style={{ color: "var(--color-primary-base) !important" }}
+            />
           </p>
           <p className="ant-upload-text">
             Click or drag file to this area to upload
