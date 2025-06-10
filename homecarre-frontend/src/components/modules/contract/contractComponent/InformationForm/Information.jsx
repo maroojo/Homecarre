@@ -1,7 +1,7 @@
 import { Form, Input, Button, Col, Row } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
-const DetailTab = () => (
+const DetailTab = ({ isEdit }) => (
   <div className="w-1/2">
     <Row gutter={16} className="w-full">
       <Col span={5}>
@@ -15,16 +15,13 @@ const DetailTab = () => (
         </Form.Item>
       </Col>
       <Col span={13}>
-        <Form.Item
-          name="propertyName"
-          label="Property Name"
-        >
+        <Form.Item name="propertyName" label="Property Name">
           <Input />
         </Form.Item>
       </Col>
       <Col span={23}>
         <Form.Item name="propertyDetail" label="Address">
-          <Input.TextArea />
+          <Input.TextArea className="!rounded-2xl" />
         </Form.Item>
       </Col>
     </Row>
@@ -69,19 +66,21 @@ const DetailTab = () => (
               </Row>
             ))}
           </Row>
-          <Form.Item>
-            <Row justify="end">
-              <Col span={3}>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  icon={<PlusOutlined />}
-                >
-                  Owner
-                </Button>
-              </Col>
-            </Row>
-          </Form.Item>
+          <div className={isEdit ? "visible" : "hidden"}>
+            <Form.Item>
+              <Row justify="end">
+                <Col span={3}>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    icon={<PlusOutlined />}
+                  >
+                    Owner
+                  </Button>
+                </Col>
+              </Row>
+            </Form.Item>
+          </div>
         </div>
       )}
     </Form.List>
@@ -126,19 +125,21 @@ const DetailTab = () => (
               </Row>
             ))}
           </Row>
-          <Form.Item>
-            <Row justify="end">
-              <Col span={3} >
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  icon={<PlusOutlined />}
-                >
-                  Tenant
-                </Button>
-              </Col>
-            </Row>
-          </Form.Item>
+          <div className={isEdit ? "visible" : "hidden"}>
+            <Form.Item>
+              <Row justify="end">
+                <Col span={3}>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    icon={<PlusOutlined />}
+                  >
+                    Tenant
+                  </Button>
+                </Col>
+              </Row>
+            </Form.Item>
+          </div>
         </div>
       )}
     </Form.List>

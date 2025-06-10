@@ -12,6 +12,7 @@ const InformationTabs = (form, isEdit, hc_no) => [
   {
     key: "info",
     label: "Information",
+    forceRender: true,
     children: (
       <Form
         form={form}
@@ -22,13 +23,14 @@ const InformationTabs = (form, isEdit, hc_no) => [
           tenants: [{ tenant_name: "" }],
         }}
       >
-        <Information />
+        <Information isEdit={isEdit} />
       </Form>
     ),
   },
   {
     key: "agree",
     label: "Agreement",
+    forceRender: true,
     children: (
       <Form form={form} layout="vertical" disabled={!isEdit}>
         <Agreement />

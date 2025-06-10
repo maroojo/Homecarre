@@ -161,12 +161,10 @@
 }
 
 .ant-upload.ant-upload-drag {
-
-  border-radius: 99px !important;
+  border-radius: 40px !important;
 
   transition: border-color 0.3s ease;
 }
-
 
 .always-show-remove .ant-upload-list-item-actions {
   opacity: 1 !important;
