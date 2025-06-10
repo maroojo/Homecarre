@@ -62,6 +62,7 @@ const ContractListPage = () => {
       }
 
       if (response) {
+        console.log("data", response);
         setData(response);
         setTotal(response.total || 0);
       }
@@ -112,7 +113,7 @@ const ContractListPage = () => {
               router.push(`/create`);
             }}
           >
-            <PlusOutlined /> create 
+            <PlusOutlined /> create
           </Button>
         }
         pagination={

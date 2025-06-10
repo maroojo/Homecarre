@@ -7,9 +7,16 @@ export const columns = (onActionClick) => [
     dataIndex: "hc_no",
     key: "hc_no",
     className: "w-24",
-    render: (text) => (
-      <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
-    ),
+    render: (_, record) => {
+      return (
+        <div className="text-left line-clamp-2 ">
+          {record.hc_no && <div className=" ">{record.hc_no}</div>}
+          {record.ct_no && (
+            <div className="text-[0.6rem] text-state-ignore">{record.ct_no}</div>
+          )}
+        </div>
+      );
+    },
   },
   {
     title: "Address",
