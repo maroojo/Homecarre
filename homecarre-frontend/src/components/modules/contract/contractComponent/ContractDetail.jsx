@@ -12,7 +12,6 @@ import useNotification from "@/hooks/useNotification";
 const ContractDetail = ({ hcId }) => {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
-  // const { getContractById, updateContract } = hcContract();
   const { getContract, updateContract } = hcContacts;
   const { fromOrigin, setFromOrigin } = useFromOrigin();
   const { success, error } = useNotification();
@@ -149,6 +148,11 @@ const ContractDetail = ({ hcId }) => {
               icon={isEdit ? <SaveOutlined /> : <EditOutlined />}
               onClick={toggleEdit}
               color={isEdit ? "green" : "blue"}
+              style={
+                isEdit
+                  ? { background: "var(--color-state-success) !important" }
+                  : { background: "var(--color-state-warning) !important" }
+              }
               variant="solid"
             >
               {isEdit ? "Save" : "Edit"}
