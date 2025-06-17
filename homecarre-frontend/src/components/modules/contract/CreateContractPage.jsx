@@ -127,7 +127,7 @@ const CreateContract = () => {
               </Col>
               <Col span={24}>
                 <Form.Item name="address" label="Address">
-                  <Input.TextArea />
+                  <Input.TextArea className="!rounded-2xl" />
                 </Form.Item>
               </Col>
             </Row>
