@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Typography, DatePicker } from "antd";
+import { CrBank } from "@homecarre-ui";
 const { Title, Text } = Typography;
 
 const AgreementTab = () => {
@@ -20,7 +21,7 @@ const AgreementTab = () => {
         <Input placeholder="Rental Price" type="number" />
       </Form.Item>
       <Form.Item label="Bank" name={"bank"}>
-        <Input />
+        <CrBank />
       </Form.Item>
       <Form.Item label="Account Name" name={"accountName"}>
         <Input />
