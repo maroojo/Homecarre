@@ -1,6 +1,7 @@
 import { Space } from "antd";
 import StatusDropdownButton from "@modules/payment/paymentComponent/StatusDropdownButton";
 import PaymentImage from "@modules/payment/paymentComponent/PaymentImage";
+import PaymentUpload from "./PaymentUpload";
 
 export const columns = (status = [], onChangeStatus) => [
   {
@@ -70,6 +71,19 @@ export const columns = (status = [], onChangeStatus) => [
         </div>
       ) : (
         ""
+      ),
+  },
+  {
+    title: "upload",
+    dataIndex: "uploadfile",
+    key: "uploadfile",
+    render: (_, record) =>
+      record.status?.toLowerCase() !== "received" ? (
+        <div data-stop-propagation>
+          <PaymentUpload paymentNo={record.payment_no} onSuccess={() => {}} />
+        </div>
+      ) : (
+        "-"
       ),
   },
   {

@@ -29,7 +29,7 @@ const ConfirmModal = ({
         footer={null}
         width={width}
         centered
-        destroyOnClose
+        destroyOnHidden
         maskClosable={maskClosable}
       >
         <div className="flex flex-col justify-center items-center text-center h-full">

@@ -62,7 +62,7 @@ const BaseModal = ({
         footer={null}
         maskClosable={maskClos}
         centered
-        destroyOnClose
+        destroyOnHidden
       >
         <div
           className={

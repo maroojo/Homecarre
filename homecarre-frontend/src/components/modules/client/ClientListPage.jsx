@@ -6,7 +6,7 @@ import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { columns } from "./clientComponent/clientColumn";
-import { hcClient } from "@homecarre-api";
+import { hcClients } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 
 //#region lazy load
@@ -21,7 +21,7 @@ const ClientForm = dynamic(
 //#endregion lazy load
 
 const ClientListPage = () => {
-  const { getClients, getClient } = hcClient();
+  const { getClients, getClient } = hcClients();
   const [searchKey, setSearchKey] = useState({ keyword: "", date: "" });
 
   const [data, setData] = useState([]);

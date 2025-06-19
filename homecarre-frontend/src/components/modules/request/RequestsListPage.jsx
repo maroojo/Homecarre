@@ -33,9 +33,9 @@ const RequestListPage = () => {
         pagesize: pageSize,
       });
       if (response) {
-        setData(response);
+        console.log("request", response, response.data, response.total);
+        setData(response.data);
         setTotal(response.total || 0);
-        console.log(response);
       }
     } catch (error) {
       console.error("API error:", error);
@@ -74,13 +74,13 @@ const RequestListPage = () => {
     callGetRepair({ searchKey, date: dateRange });
   }, [searchKey, dateRange]);
 
-  const tableData = data ? data.data : [];
+  const tableData = data ? data : [];
 
   return (
     <div>
       <ClTable
         onSearch={<CtSearch onSearch={handleSearch} />}
-        total={data?.total ?? "N/A"}
+        total={total ?? "N/A"}
         pagination={
           <CtPagination
             default={currentPage}

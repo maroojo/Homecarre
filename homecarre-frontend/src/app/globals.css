@@ -152,9 +152,10 @@
   font-size: 14px !important;
 }
 
-.ant-input {
+.ant-input:not(textarea) {
   border-radius: 9999px !important;
 }
+
 
 .ant-picker {
   border-radius: 9999px !important;

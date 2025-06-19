@@ -58,7 +58,7 @@ const ContractListPage = () => {
           pageSize
         );
       } else {
-        response = await getContractList(page, pageSize);
+        response = await getContractList("", [], page, pageSize);
       }
 
       if (response) {

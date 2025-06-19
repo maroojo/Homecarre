@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 
 import useNotification from "@/hooks/useNotification";
 import { hcContacts } from "@homecarre-api";
-import { CrBank } from "@homecarre-ui";
+import { CeIsBank } from "@homecarre-ui";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -204,7 +204,7 @@ const CreateContract = () => {
                     { required: true, message: "Please input bank name" },
                   ]}
                 >
-                  <CrBank dropdownStyle={{ width: "15%" }} />
+                  <CeIsBank dropdownStyle={{ width: "15%" }} />
                 </Form.Item>
               </Col>
               <Col span={7}>

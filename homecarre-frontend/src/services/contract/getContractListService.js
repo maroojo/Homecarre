@@ -1,7 +1,7 @@
 import api from "@/util/api";
 import dayjs from "dayjs";
 
-const getContracts = async (page = 1, pageSize = 10, keyword, dateRange) => {
+const getContracts = async (keyword, dateRange, page = 1, pageSize = 10) => {
   try {
     const startDate = dateRange?.[0]
       ? dayjs(dateRange[0]).format("YYYY-MM-DD")

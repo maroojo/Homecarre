@@ -1,6 +1,6 @@
 import api from "@/util/api";
 
-const getHcNoService = async (data) => {
+const searchHcNoService = async (data) => {
   try {
     const response = await api(`/admin/contract/search-hc?q=${data}`, "GET");
     return response;
@@ -10,4 +10,4 @@ const getHcNoService = async (data) => {
   }
 };
 
-export default getHcNoService;
+export default searchHcNoService;

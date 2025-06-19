@@ -5,8 +5,8 @@ const CreatePaymentPage = () => {
   return (
     <div>
       <h3>create a billing </h3>
-      <div className="bg-background w-full rounded flex justify-center mt-5">
-        <div className="w-1/2 h-max my-10">
+      <div className="bg-background w-full rounded flex justify-start mt-5">
+        <div className="w-full h-max m-10">
           <CreateFromPayment />
         </div>
       </div>

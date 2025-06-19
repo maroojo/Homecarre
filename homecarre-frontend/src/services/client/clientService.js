@@ -1,4 +1,6 @@
 import api from "@/util/api";
+import dayjs from "dayjs";
+import { handleApiResponse } from "@/util/handleApiResponse";
 
 const ClientService = () => {
   const getClients = async (page = 1, pageSize = 10) => {
@@ -68,6 +70,14 @@ const ClientService = () => {
       return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
     }
   };
-  return { getClients, getClient, updateClient, insertClient };
+
+  const searchClient = async (data) => {
+    const response = await handleApiResponse(
+      api(`/admin/client/search?key=${data}`, "GET")
+    );
+    return response;
+  };
+
+  return { getClients, getClient, updateClient, insertClient, searchClient };
 };
 export default ClientService;

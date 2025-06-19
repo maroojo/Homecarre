@@ -44,7 +44,7 @@ const PaymentImage = ({ text }) => {
         width={460}
         centered
         maskClosable={true}
-        destroyOnClose
+        destroyOnHidden
       >
         {/* <div className="w-full flex flex-col items-center gap-2">
           {images.map((path, idx) => (
@@ -63,6 +63,7 @@ const PaymentImage = ({ text }) => {
           src={`https://www.accomasia.co.th/homecare/public${text}`}
           alt="slip preview"
           style={{ width: "100%" }}
+          preview={false}
         />
       </Modal>
     </>

@@ -19,12 +19,12 @@ const RequestImage = ({ text, hc_no }) => {
   };
 
   const handleClose = (e) => {
-    e?.stopPropagation();
+    e.stopPropagation();
     setVisible(false);
   };
 
   return (
-    <>
+    <div>
       <Button
         type="primary"
         icon={<EyeOutlined />}
@@ -33,7 +33,7 @@ const RequestImage = ({ text, hc_no }) => {
       />
       <span className="text-sm text-gray-600">/ {images.length}</span>
 
-      <Modal
+      {/* <Modal
         title="Request Images"
         open={visible}
         onCancel={handleClose}
@@ -41,7 +41,7 @@ const RequestImage = ({ text, hc_no }) => {
         width={600}
         centered
         maskClosable={true}
-        destroyOnClose
+        destroyOnHidden
       >
         <div className="w-full flex flex-col gap-4 items-center">
           {images.map((path, idx) => (
@@ -55,8 +55,40 @@ const RequestImage = ({ text, hc_no }) => {
             />
           ))}
         </div>
-      </Modal>
-    </>
+      </Modal> */}
+
+      {visible && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 flex justify-center items-center"
+          onClick={handleClose}
+          style={{ pointerEvents: "auto" }}
+        >
+          <div
+            className="relative z-10 w-[90%] max-w-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image.PreviewGroup
+              preview={{
+                visible,
+                onVisibleChange: (vis) => setVisible(vis),
+                keyboard: true,
+              }}
+            >
+              {images.map((path, idx) => (
+                <Image
+                  key={idx}
+                  src={`https://www.accomasia.co.th/homecare/public/storage/${path}`}
+                  alt={`preview-${idx}`}
+                  width={1}
+                  height={1}
+                  style={{ display: "none" }}
+                />
+              ))}
+            </Image.PreviewGroup>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

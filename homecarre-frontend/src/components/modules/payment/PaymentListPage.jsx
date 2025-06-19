@@ -61,6 +61,7 @@ const PaymentListPage = () => {
       ]);
 
       if (paymentRes && statusRes) {
+        console.log("paymentRes", paymentRes);
         setData(paymentRes.data);
         setTotal(paymentRes.total || 0);
         setPaymentStatus(statusRes);

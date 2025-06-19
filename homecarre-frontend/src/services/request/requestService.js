@@ -1,4 +1,6 @@
 import api from "@/util/api";
+import { handleApiResponse } from "@/util/handleApiResponse";
+import dayjs from "dayjs";
 
 const requestService = () => {
   const getRepairs = async ({
@@ -17,66 +19,46 @@ const requestService = () => {
     const endDate = dateRange?.[1]
       ? dayjs(dateRange[1]).format("YYYY-MM-DD")
       : null;
-    try {
-      console.log("sand", page);
-      const response = await api(
-        (() => {
-          let url = `/r/getrepair?page=${page}&pagesize=${pagesize}`;
-          if (keyword) url += `&txtsearch=${keyword}`;
-          if (startDate) url += `&start_date=${startDate}`;
-          if (endDate) url += `&end_date=${endDate}`;
-          if (hc_no) url += `&hc_no=${hc_no}`;
-          return url;
-        })(),
-        "GET"
-      );
-      return response;
-    } catch (error) {
-      console.error("Error setting favorite:", error);
-      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
-    }
+
+    const endpoint = (() => {
+      let url = `/r/getrepair?page=${page}&pagesize=${pagesize}`;
+      if (keyword) url += `&txtsearch=${keyword}`;
+      if (startDate) url += `&start_date=${startDate}`;
+      if (endDate) url += `&end_date=${endDate}`;
+      if (hc_no) url += `&hc_no=${hc_no}`;
+      return url;
+    })();
+    const response = await handleApiResponse(api(endpoint, "GET"));
+    return response;
   };
 
   const updateRepairStatus = async (request_no, status) => {
-    try {
-      const response = await api(
-        "/admin/repair-request/update-status",
-        "POST",
-        {
-          request_no: request_no,
-          status: status,
-        }
-      );
-      console.log("first response", response);
-      return response;
-    } catch (error) {
-      console.error("Error updating repair status:", error);
-      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
-    }
+    const response = await handleApiResponse(
+      api("/admin/repair-request/update-status", "POST", {
+        request_no: request_no,
+        status: status,
+      }),
+      true
+    );
+    return response;
   };
 
   const getRequestStatus = async () => {
-    try {
-      const response = await api("/admin/request/statuses", "GET");
-      return response;
-    } catch (error) {
-      console.error("Error setting favorite:", error);
-      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
-    }
+    const response = await handleApiResponse(
+      api("/admin/request/statuses", "GET")
+    );
+    return response.data;
   };
 
   const updateRequestStatus = async (request_no, status) => {
-    try {
-      console.log("set", request_no, status);
-      const response = await api("/admin/request/change-status", "POST", {
+    const response = await handleApiResponse(
+      api("/admin/request/change-status", "POST", {
         repair_no: request_no,
         status,
-      });
-      return response;
-    } catch (error) {
-      console.error("Error setting favorite:", error);
-      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
-    }
+      }),
+      true
+    );
+    return response;
   };
 
   return {

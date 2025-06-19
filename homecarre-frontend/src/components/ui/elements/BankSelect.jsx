@@ -34,7 +34,11 @@ const BankSelect = ({ value, onChange, dropdownStyle, ...props }) => {
     <Select
       value={value}
       onChange={onChange}
-      dropdownStyle={dropdownStyle}
+      styles={{
+        popup: {
+          root: { maxHeight: 300 },
+        },
+      }}
       showSearch
       optionFilterProp="children"
       {...props}
