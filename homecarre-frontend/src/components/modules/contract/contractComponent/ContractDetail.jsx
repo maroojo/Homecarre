@@ -5,14 +5,15 @@ import dayjs from "dayjs";
 import { Form, Tabs, Button, Spin } from "antd";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useFromOrigin } from "@/context/FromOriginContext";
-import { hcContacts } from "@homecarre-api";
+import { hcContacts, hcContractManager } from "@homecarre-api";
 import InformationTabs from "./InformationForm/InformationTabs";
 import useNotification from "@/hooks/useNotification";
 
 const ContractDetail = ({ hcId }) => {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
-  const { getContract, updateContract } = hcContacts;
+  const { updateContract } = hcContractManager();
+  const { getContract } = hcContacts;
   const { fromOrigin, setFromOrigin } = useFromOrigin();
   const { success, error } = useNotification();
   const [data, setData] = useState([]);
