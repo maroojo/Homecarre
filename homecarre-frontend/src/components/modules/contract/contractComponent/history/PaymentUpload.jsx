@@ -19,6 +19,16 @@ const PaymentUpload = ({ paymentNo, onSuccess }) => {
     const file = event.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      message.error("Please upload an image file");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      message.error("File is too large (max 2MB)");
+      return;
+    }
+
     setSelectedFile(file);
     setPreviewUrl(URL.createObjectURL(file));
     setModalVisible(true);
@@ -34,6 +44,8 @@ const PaymentUpload = ({ paymentNo, onSuccess }) => {
         payment_no: paymentNo,
         image: base64,
       });
+
+      inputRef.current.value = "";
 
       if (response?.error) {
         message.error(response.error || "Upload failed");

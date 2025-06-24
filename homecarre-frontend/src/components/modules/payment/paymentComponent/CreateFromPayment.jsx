@@ -45,6 +45,7 @@ const CreateFromPayment = () => {
     due_date: null,
     payment_month: null,
     payment_types_id: null,
+    billing_to: "",
     payment_note: "",
   });
 
@@ -52,21 +53,21 @@ const CreateFromPayment = () => {
     setFormData(allValues);
   };
 
-  const handleSearchHcNo = useMemo(
-    () =>
-      debounce(async (value) => {
-        if (!value || value.length < 2) return;
-        const response = await searchHcNo(value);
-        if (response?.isSuccess) {
-          if (response.data.length > 0) {
-            setHcNoOptions(response.data.map((hc_no) => ({ value: hc_no })));
-          } else {
-            setHcNoOptions([]);
-          }
-        }
-      }, 200),
-    []
-  );
+  // const handleSearchHcNo = useMemo(
+  //   () =>
+  //     debounce(async (value) => {
+  //       if (!value || value.length < 2) return;
+  //       const response = await searchHcNo(value);
+  //       if (response?.isSuccess) {
+  //         if (response.data.length > 0) {
+  //           setHcNoOptions(response.data.map((hc_no) => ({ value: hc_no })));
+  //         } else {
+  //           setHcNoOptions([]);
+  //         }
+  //       }
+  //     }, 200),
+  //   []
+  // );
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -97,6 +98,7 @@ const CreateFromPayment = () => {
         due_date: null,
         payment_month: null,
         payment_types_id: null,
+        billing_to: "",
         payment_note: "",
       });
     }
@@ -131,6 +133,7 @@ const CreateFromPayment = () => {
           onFinish={onFinish}
           onValuesChange={onValuesChange}
           initialValues={{
+            billing_to: "tenant",
             rent_price: 0,
             payment_month: dayjs(),
           }}
@@ -153,8 +156,10 @@ const CreateFromPayment = () => {
           >
             <CeIacHcNo
               onSelect={(val) => {
-                form.setFieldValue("hc_no", val);
-                setSelectedHcNo(val);
+                if (form.getFieldValue("hc_no") !== val) {
+                  form.setFieldValue("hc_no", val);
+                  setSelectedHcNo(val);
+                }
               }}
               onChange={(val) => {
                 setSelectedHcNo(null);
@@ -167,7 +172,11 @@ const CreateFromPayment = () => {
             name="rent_price"
             rules={[{ required: true, message: "Specify Amount" }]}
           >
-            <InputNumber min={0} style={{ width: "100%" }} controls={false} />
+            <InputNumber
+              min={0}
+              style={{ width: "100%", borderRadius: "9999999px" }}
+              controls={false}
+            />
           </Form.Item>
 
           <Form.Item
@@ -194,14 +203,25 @@ const CreateFromPayment = () => {
           <Form.Item
             label="Payment Types"
             name="payment_types_id"
-            rules={[{ required: true, message: "please select type" }]}
+            rules={[{ required: true }]}
           >
-            <Select placeholder="select">
+            <Select placeholder="select payment type">
               {paymentTypes.map((type) => (
                 <Select.Option key={type.id} value={type.id}>
                   {type.type_label}
                 </Select.Option>
               ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="Billing To"
+            name="billing_to"
+            rules={[{ required: true }]}
+          >
+            <Select placeholder="select payer">
+              <Select.Option value="owner">Owner</Select.Option>
+              <Select.Option value="tenant">Tenant</Select.Option>
             </Select>
           </Form.Item>
 
@@ -258,7 +278,7 @@ const CreateFromPayment = () => {
             <Text>
               {formData.payment_month
                 ? dayjs(formData.payment_month).format("MM-YYYY")
-                : "-"}
+                : dayjs().startOf("month").format("MM-YYYY")}
             </Text>
           </p>
           <p className="flex justify-between">
@@ -267,6 +287,10 @@ const CreateFromPayment = () => {
               {paymentTypes.find((t) => t.id === formData.payment_types_id)
                 ?.type_label || "-"}
             </Text>
+          </p>
+          <p className="flex justify-between">
+            <Text strong>ผู้ชำระ:</Text>
+            <Text>{formData.billing_to || "tenant"}</Text>
           </p>
           <p className="flex flex-col">
             <Text strong>หมายเหตุ:</Text>

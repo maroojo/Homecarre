@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 import { useFromOrigin } from "@/context/FromOriginContext";
 import { hcRequest } from "@homecarre-api";
@@ -81,6 +83,16 @@ const RequestListPage = () => {
       <ClTable
         onSearch={<CtSearch onSearch={handleSearch} />}
         total={total ?? "N/A"}
+        rightButton={
+          <Button
+            variant="solid"
+            onClick={() => {
+              router.push(`/create`);
+            }}
+          >
+            <PlusOutlined /> Request
+          </Button>
+        }
         pagination={
           <CtPagination
             default={currentPage}

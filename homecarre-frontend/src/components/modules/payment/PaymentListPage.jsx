@@ -147,11 +147,6 @@ const PaymentListPage = () => {
       <ClTable
         onSearch={<CtSearch onSearch={handleSearch} />}
         total={total ?? "N/A"}
-        rightButton={
-          <Button variant="solid">
-            <PlusOutlined /> {month}
-          </Button>
-        }
         pagination={
           <CtPagination
             default={currentPage}

@@ -51,16 +51,6 @@ const ContractsService = () => {
     }
   };
 
-  const updateContract = async (data) => {
-    try {
-      const response = await api(`/h/updatehomecarre`, "POST", data);
-      return response;
-    } catch (error) {
-      console.error("Error setting favorite:", error);
-      return { isSuccess: false, message: "เกิดข้อผิดพลาด", result: [] };
-    }
-  };
-
   const createContract = async (data) => {
     try {
       const response = await api(`/h/inserthomecarre`, "POST", data);
@@ -108,7 +98,6 @@ const ContractsService = () => {
     getContracts,
     getContract,
     getContractById,
-    updateContract,
     createContract,
     propertyCode,
     uploadFile,
