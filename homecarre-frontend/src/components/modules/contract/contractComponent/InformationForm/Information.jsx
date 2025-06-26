@@ -13,7 +13,7 @@ const DetailTab = ({ isEdit }) => {
         </Col>
         <Col span={5}>
           <Form.Item label="Property Code" name="propertyCode">
-            <Input disabled />
+            <Input />
           </Form.Item>
         </Col>
         <Col span={13}>
