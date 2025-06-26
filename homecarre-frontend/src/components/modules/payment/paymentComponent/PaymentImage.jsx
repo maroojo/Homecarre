@@ -60,7 +60,7 @@ const PaymentImage = ({ text }) => {
           ))}
         </div> */}
         <Image
-          src={`https://www.accomasia.co.th/homecare/public${text}`}
+          src={`https://www.accomasia.co.th/homecare/public${text}?t=${Date.now()}`}
           alt="slip preview"
           style={{ width: "100%" }}
           preview={false}

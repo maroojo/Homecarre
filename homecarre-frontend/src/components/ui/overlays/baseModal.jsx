@@ -81,7 +81,7 @@ const BaseModal = ({
             }
             preview={false}
           />
-          <div className="font-semibold text-xl">{children}</div>
+          <div className="w-full">{children}</div>
           <div className="flex justify-end gap-4 my-5">
             {footerButtons?.[0] && (
               <div className="py-1 text-primary rounded-full border-primary border-2 cursor-pointer bg-white hover:transform hover:scale-101 hover:ease-in-out">

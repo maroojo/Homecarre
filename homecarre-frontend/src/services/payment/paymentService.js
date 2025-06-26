@@ -68,19 +68,10 @@ const PaymentService = () => {
 
   const uploadPaymentFile = async (data) => {
     const response = await handleApiResponse(
-      api(
-        "/admin/payment/upload",
-        "POST",
-        {
-          payment_no: data.payment_no,
-          image: data.image,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ),
+      api("/admin/payment/upload", "POST", {
+        payment_no: data.payment_no,
+        image: data.image,
+      }),
       true
     );
     return response;

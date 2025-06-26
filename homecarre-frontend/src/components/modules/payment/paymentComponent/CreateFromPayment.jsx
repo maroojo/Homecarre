@@ -142,17 +142,7 @@ const CreateFromPayment = () => {
             label="Homecarre No. (HC No.)"
             name="hc_no"
             validateTrigger={["onBlur"]}
-            rules={[
-              { required: true, message: "please input Homecarre No." },
-              () => ({
-                validator(_, value) {
-                  if (!value || value === selectedHcNo) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error("no HC No. in contract"));
-                },
-              }),
-            ]}
+            rules={[{ required: true, message: "please input Homecarre No." }]}
           >
             <CeIacHcNo
               onSelect={(val) => {

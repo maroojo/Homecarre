@@ -1,19 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
+import { Button } from "antd";
 import useNotification from "@/hooks/useNotification";
 import { hcRequest } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./RequestColumn";
 import { useStatus } from "@/context/initialConfigContext";
+import { PlusOutlined } from "@ant-design/icons";
 
-const Status = [
-  { code: "New", label: "New", colorClass: "bg-red-500" },
-  { code: "Deny", label: "Deny", colorClass: "bg-gray-400" },
-  { code: "Accept", label: "Accept", colorClass: "bg-yellow-400" },
-  { code: "Done", label: "Done", colorClass: "bg-green-500" },
-];
+const CoModal = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoModal),
+  { ssr: false }
+);
+const CeFmRequest = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CeFmRequest),
+  { ssr: false }
+);
 
 const Request = () => {
   const { hcID } = useParams();
@@ -27,6 +32,8 @@ const Request = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const callGetRepair = async (searchParams, page = 1) => {
     setLoading(true);
@@ -61,6 +68,14 @@ const Request = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
     callGetRepair(searchKey, page);
+  };
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
   };
 
   const handleStatusChange = async (requestId, status) => {
@@ -103,6 +118,12 @@ const Request = () => {
       <ClTable
         onSearch={<CtSearch onSearch={handleSearch} />}
         total={data?.total ?? "N/A"}
+        rightButton={
+          <Button onClick={() => handleOpenModal()}>
+            <PlusOutlined />
+            Request
+          </Button>
+        }
         pagination={
           <CtPagination
             default={currentPage}
@@ -111,6 +132,26 @@ const Request = () => {
             onChange={handlePageChange}
             className="mt-4 text-center"
           />
+        }
+        modal={
+          <CoModal
+            visible={modalOpen}
+            onClose={handleCloseModal}
+            width={"60%"}
+            maskClos={false}
+            title={"Request"}
+          >
+            <div className="w-full mt-5">
+              <CeFmRequest
+                initialData={{ hc_no: hcID }}
+                onSuccess={() => {
+                  handleCloseModal();
+                  callGetRepair(searchKey, currentPage);
+                }}
+                onClose={() => setModalOpen(false)}
+              />
+            </div>
+          </CoModal>
         }
       >
         <CtTable

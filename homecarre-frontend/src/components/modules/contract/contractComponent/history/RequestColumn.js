@@ -45,7 +45,7 @@ export const columns = (status = [], onChangeStatus) => [
     render: (_, record) => {
       return (
         <div className="line-clamp-1 h-[3rem] text-left">
-          <div className="font-bold">{record.schedule[0].date}</div>
+          <div className="font-bold">{record.schedule[0]?.date || "-"}</div>
         </div>
       );
     },

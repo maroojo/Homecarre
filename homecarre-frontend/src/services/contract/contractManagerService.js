@@ -8,7 +8,8 @@ const ContractManagerService = () => {
     const cleanedData = cleanUndefined(data);
 
     const response = await handleApiResponse(
-      api(`/admin/contract/create`, "POST", cleanedData)
+      api(`/admin/contract/create`, "POST", cleanedData),
+      true
     );
     return response;
   };
