@@ -7,12 +7,12 @@ const AgreementTab = () => {
   const { RangePicker } = DatePicker;
   return (
     <div className="flex flex-col w-1/2">
-      <Form.Item label="Lease Term" name={"time"}>
-        <Input placeholder="Lease Term" type="number" />
-      </Form.Item>
       <Text>month</Text>
       <Form.Item name="dateRange">
-        <RangePicker allowEmpty={[true, true]} />
+        <RangePicker allowEmpty={[true, true]} className="w-full"/>
+      </Form.Item>
+      <Form.Item label="Lease Term" name={"time"}>
+        <Input placeholder="Lease Term" type="number" />
       </Form.Item>
       <Form.Item label="Payment Due Date" name={"agreementDatePay"}>
         <Input placeholder="Payment Due Date" type="number" />

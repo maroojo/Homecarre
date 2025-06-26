@@ -71,7 +71,7 @@ const ContractDetail = ({ hcId }) => {
         hc_no: values.HCNo,
         property_code: values.propertyCode,
         property_name: values.propertyName,
-        property_detail: values.propertyDetail,
+        address: values.propertyDetail,
         date_start: values.dateRange?.[0]?.format("YYYY-MM-DD"),
         date_end: values.dateRange?.[1]?.format("YYYY-MM-DD"),
         agreement_lease: Number(values.time),
@@ -89,16 +89,8 @@ const ContractDetail = ({ hcId }) => {
       if (response?.isSuccess) {
         setIsEdit(false);
         getContractId();
-        success({
-          message: `Contract updated to successfully`,
-          onClose: () => {},
-        });
       } else {
         console.error("Update failed:", response?.message);
-        error({
-          message: `Failed to update status: ${response.message}`,
-          onClose: () => {},
-        });
       }
     } catch (err) {
       console.error("Validation or Update Error:", err);

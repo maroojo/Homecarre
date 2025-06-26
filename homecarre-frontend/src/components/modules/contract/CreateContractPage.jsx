@@ -44,7 +44,8 @@ const CreateContract = () => {
 
   const handleAccountChange = (e) => {
     const rawValue = e.target.value;
-    const cleanedValue = rawValue.replace(/-/g, "");
+    // const cleanedValue = rawValue.replace(/-/g, "");
+    const cleanedValue = rawValue.replace(/\D/g, "");
     form.setFieldsValue({ account_no: cleanedValue });
   };
 
@@ -211,11 +212,12 @@ const CreateContract = () => {
                 <Form.Item
                   name="account_no"
                   label="Account Number"
+                  normalize={(value) => value.replace(/\D/g, "")}
                   rules={[
                     { required: true, message: "Please input account number" },
                   ]}
                 >
-                  <Input onChange={handleAccountChange} />
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={6}>

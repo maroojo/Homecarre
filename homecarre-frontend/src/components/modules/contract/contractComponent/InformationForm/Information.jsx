@@ -33,10 +33,11 @@ const DetailTab = ({ isEdit }) => {
         {(fields, { add, remove }) => (
           <div>
             <Row>
+              <Col span={5}>Client Code</Col>
               <Col span={12} className="mb-2">
                 Owners
               </Col>
-              <Col span={12}>Telephone</Col>
+              <Col span={7}>Telephone</Col>
               {fields.map(({ key, name, ...restField }, index) => (
                 <Row
                   gutter={16}
@@ -44,6 +45,14 @@ const DetailTab = ({ isEdit }) => {
                   style={{ display: "flex", width: "100%" }}
                   align="end"
                 >
+                  <Col span={5}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "owner_code"]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
                   <Col span={12}>
                     <Form.Item
                       {...restField}
@@ -55,8 +64,8 @@ const DetailTab = ({ isEdit }) => {
                       <Input placeholder={`Owner ${index + 1}`} />
                     </Form.Item>
                   </Col>
-                  <Col span={11}>
-                    <Form.Item {...restField} name={[name, "owner_phone"]}>
+                  <Col span={6}>
+                    <Form.Item {...restField} name={[name, "owner_telephone"]}>
                       <Input />
                     </Form.Item>
                   </Col>
@@ -92,10 +101,11 @@ const DetailTab = ({ isEdit }) => {
         {(fields, { add, remove }) => (
           <div>
             <Row>
+              <Col span={5}>Client Code</Col>
               <Col span={12} className="mb-2">
                 Tenants
               </Col>
-              <Col span={12}>Telephone</Col>
+              <Col span={7}>Telephone</Col>
               {fields.map(({ key, name, ...restField }, index) => (
                 <Row
                   gutter={16}
@@ -103,6 +113,14 @@ const DetailTab = ({ isEdit }) => {
                   style={{ display: "flex", width: "100%" }}
                   align="end"
                 >
+                  <Col span={5}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "tenant_code"]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
                   <Col span={12}>
                     <Form.Item
                       {...restField}
@@ -114,8 +132,8 @@ const DetailTab = ({ isEdit }) => {
                       <Input placeholder={`Tenant ${index + 1}`} />
                     </Form.Item>
                   </Col>
-                  <Col span={11}>
-                    <Form.Item {...restField} name={[name, "tenant_phone"]}>
+                  <Col span={6}>
+                    <Form.Item {...restField} name={[name, "tenant_telephone"]}>
                       <Input />
                     </Form.Item>
                   </Col>
