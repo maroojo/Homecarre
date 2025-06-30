@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 
 import useNotification from "@/hooks/useNotification";
 import { hcContacts } from "@homecarre-api";
+import { hcContractManager } from "@homecarre-api";
 import { CeIsBank } from "@homecarre-ui";
 
 const { RangePicker } = DatePicker;
@@ -28,7 +29,7 @@ const { Option } = Select;
 const CreateContract = () => {
   const [form] = Form.useForm();
   const router = useRouter();
-  const { createContract } = hcContacts;
+  const { createContract } = hcContractManager();
   const { success, error, warning } = useNotification();
 
   const [removingKeys, setRemovingKeys] = useState([]);
@@ -50,7 +51,6 @@ const CreateContract = () => {
   };
 
   const onFinish = async (values) => {
-    console.log("Form values:", values);
     setLoading(true);
     try {
       const payloadRaw = {
@@ -64,11 +64,8 @@ const CreateContract = () => {
         Object.entries(payloadRaw).filter(([_, v]) => v !== undefined)
       );
 
-      console.log("Payload to send:", payload);
-
       const response = await createContract(payload);
       if (response.isSuccess) {
-        success({ message: "สร้าง homecarre สำเร็จ" });
         router.push("/");
       }
     } catch (error) {
@@ -99,8 +96,8 @@ const CreateContract = () => {
             layout="vertical"
             initialValues={{
               clients: [
-                { fullname: "", telephone: "", client_type: "owner" },
-                { fullname: "", telephone: "", client_type: "tenant" },
+                { fullname: "", client_telephone: "", client_type: "owner" },
+                { fullname: "", client_telephone: "", client_type: "tenant" },
               ],
             }}
           >
@@ -283,7 +280,7 @@ const CreateContract = () => {
 
                           <Form.Item
                             {...restField}
-                            name={[name, "telephone"]}
+                            name={[name, "client_telephone"]}
                             label="Telephone"
                           >
                             <Input />
@@ -329,7 +326,7 @@ const CreateContract = () => {
 
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit Form
+                Create
               </Button>
             </Form.Item>
           </Form>

@@ -1,14 +1,12 @@
 import dayjs from "dayjs";
-import { handleApiResponse, cleanFormUndefined } from "@/util";
+import { handleApiResponse } from "@/util";
 import api from "@/util/api";
+
 
 const ContractManagerService = () => {
   const createContract = async (data) => {
-    data.clients = data.clients.map((client) => cleanFormUndefined(client));
-    const cleanedData = cleanUndefined(data);
-
     const response = await handleApiResponse(
-      api(`/admin/contract/create`, "POST", cleanedData),
+      api(`/admin/contract/create`, "POST", data),
       true
     );
     return response;
