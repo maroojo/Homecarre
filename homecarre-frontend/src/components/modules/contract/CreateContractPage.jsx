@@ -285,7 +285,6 @@ const CreateContract = () => {
                             {...restField}
                             name={[name, "telephone"]}
                             label="Telephone"
-                            rules={[{ required: true, message: "Required" }]}
                           >
                             <Input />
                           </Form.Item>
