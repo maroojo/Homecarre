@@ -18,8 +18,6 @@ import {
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
-import useNotification from "@/hooks/useNotification";
-import { hcContacts } from "@homecarre-api";
 import { hcContractManager } from "@homecarre-api";
 import { CeIsBank } from "@homecarre-ui";
 
@@ -30,10 +28,11 @@ const CreateContract = () => {
   const [form] = Form.useForm();
   const router = useRouter();
   const { createContract } = hcContractManager();
-  const { success, error, warning } = useNotification();
 
   const [removingKeys, setRemovingKeys] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const dateFormat = "DD-MM-YYYY";
 
   const handleRemove = (name) => {
     setRemovingKeys((prev) => [...prev, name]);
@@ -124,7 +123,14 @@ const CreateContract = () => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={24}>
+            </Row>
+            <Row gutter={16}>
+              <Col span={5}>
+                <Form.Item name="unit" label="unit / house No.">
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={19}>
                 <Form.Item name="address" label="Address">
                   <Input.TextArea className="!rounded-2xl" />
                 </Form.Item>
@@ -140,7 +146,7 @@ const CreateContract = () => {
                     { required: true, message: "Please select start date" },
                   ]}
                 >
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} format={dateFormat} />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -151,7 +157,7 @@ const CreateContract = () => {
                     { required: true, message: "Please select end date" },
                   ]}
                 >
-                  <DatePicker style={{ width: "100%" }} />
+                  <DatePicker style={{ width: "100%" }} format={dateFormat} />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -191,7 +197,11 @@ const CreateContract = () => {
                     { required: true, message: "Please input rent price" },
                   ]}
                 >
-                  <InputNumber style={{ width: "100%" }} />
+                  <InputNumber
+                    min={0}
+                    style={{ width: "100%", borderRadius: "9999999px" }}
+                    controls={false}
+                  />
                 </Form.Item>
               </Col>
               <Col span={7}>

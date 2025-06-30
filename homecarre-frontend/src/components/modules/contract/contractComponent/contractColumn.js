@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 export const columns = (onActionClick) => [
   {
@@ -12,7 +13,9 @@ export const columns = (onActionClick) => [
         <div className="text-left line-clamp-2 ">
           {record.hc_no && <div className=" ">{record.hc_no}</div>}
           {record.ct_no && (
-            <div className="text-[0.6rem] text-state-ignore">{record.ct_no}</div>
+            <div className="text-[0.6rem] text-state-ignore">
+              {record.ct_no}
+            </div>
           )}
         </div>
       );
@@ -57,7 +60,9 @@ export const columns = (onActionClick) => [
     key: "contractStart",
     className: "w-28",
     render: (text) => (
-      <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
+      <div className="line-clamp-1 h-[3rem] text-left">
+        {text ? dayjs(text).format("DD-MM-YYYY") : "-"}
+      </div>
     ),
   },
   {
@@ -66,7 +71,9 @@ export const columns = (onActionClick) => [
     key: "contractEnd",
     className: "w-28",
     render: (text) => (
-      <div className="line-clamp-1 h-[3rem] text-left">{text}</div>
+      <div className="line-clamp-1 h-[3rem] text-left">
+        {text ? dayjs(text).format("DD-MM-YYYY") : "-"}
+      </div>
     ),
   },
   {

@@ -1,6 +1,7 @@
 import { Tag } from "antd";
 import RequestImage from "@modules/request/requestComponent/RequestImage";
 import StatusDropdownButton from "@modules/request/requestComponent/statusDropdownButton";
+import dayjs from "dayjs";
 
 export const columns = (status = [], onChangeStatus) => [
   {
@@ -45,7 +46,11 @@ export const columns = (status = [], onChangeStatus) => [
     render: (_, record) => {
       return (
         <div className="line-clamp-1 h-[3rem] text-left">
-          <div className="font-bold">{record.schedule[0]?.date || "-"}</div>
+          <div className="font-bold">
+            {record.schedule[0]?.date
+              ? dayjs(record.schedule[0]?.date).format("DD-MM-YYYY")
+              : "-"}
+          </div>
         </div>
       );
     },

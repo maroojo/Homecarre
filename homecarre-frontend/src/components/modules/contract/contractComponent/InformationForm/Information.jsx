@@ -17,11 +17,18 @@ const DetailTab = ({ isEdit }) => {
           </Form.Item>
         </Col>
         <Col span={13}>
-          <Form.Item name="propertyName" label="Property Name">
+          <Form.Item label="Property Name" name="propertyName">
             <Input />
           </Form.Item>
         </Col>
-        <Col span={23}>
+      </Row>
+      <Row gutter={16}>
+        <Col span={5}>
+          <Form.Item label="unit / house No." name="unit">
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col span={18}>
           <Form.Item name="propertyDetail" label="Address">
             <Input.TextArea className="!rounded-2xl" />
           </Form.Item>
@@ -46,10 +53,7 @@ const DetailTab = ({ isEdit }) => {
                   align="end"
                 >
                   <Col span={5}>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "owner_code"]}
-                    >
+                    <Form.Item {...restField} name={[name, "owner_code"]}>
                       <Input />
                     </Form.Item>
                   </Col>
@@ -114,10 +118,7 @@ const DetailTab = ({ isEdit }) => {
                   align="end"
                 >
                   <Col span={5}>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "tenant_code"]}
-                    >
+                    <Form.Item {...restField} name={[name, "tenant_code"]}>
                       <Input />
                     </Form.Item>
                   </Col>

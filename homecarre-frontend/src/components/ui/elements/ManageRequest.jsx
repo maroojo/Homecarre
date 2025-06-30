@@ -124,7 +124,9 @@ const ManageRequest = ({ initialData, onSuccess, onClose }) => {
                       <Form.Item
                         {...restField}
                         name={[name, "date"]}
-                        rules={[{ required: true }]}
+                        rules={[
+                          { required: true, message: "date picker to require" },
+                        ]}
                       >
                         <DatePicker format={dateFormat} className="w-full" />
                       </Form.Item>
@@ -133,7 +135,7 @@ const ManageRequest = ({ initialData, onSuccess, onClose }) => {
                       <Form.Item
                         {...restField}
                         name={[name, "time"]}
-                        rules={[{ required: true }]}
+                        rules={[{ required: true, message: "select time" }]}
                       >
                         <Select placeholder="Time" className="w-40">
                           <Select.Option value="morning">
@@ -172,15 +174,6 @@ const ManageRequest = ({ initialData, onSuccess, onClose }) => {
               placeholder="e.g. call me if you're coming"
             />
           </Form.Item>
-
-          <div className="flex gap-4 justify-end">
-            <Button htmlType="button" onClick={() => router.back()}>
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              {isEditMode ? "Update" : "Create"}
-            </Button>
-          </div>
         </Col>
         <Col span={12}>
           <Form.Item label="Upload Images">
@@ -214,6 +207,18 @@ const ManageRequest = ({ initialData, onSuccess, onClose }) => {
                 />
               </div>
             ))}
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <div className="flex gap-4 justify-end">
+            <Button htmlType="button" onClick={() => onClose?.()}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              {isEditMode ? "Update" : "Create"}
+            </Button>
           </div>
         </Col>
       </Row>
