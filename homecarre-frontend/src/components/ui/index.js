@@ -15,4 +15,5 @@ export { default as CeIsBank } from "./elements/BankSelect";
 export { default as CeIac } from "./elements/InputAutoComplete";
 export { default as CeIacHcNo } from "./elements/HcNoAutoComplete";
 
-export {default as CeFmRequest} from "./elements/ManageRequest";
+export { default as CeFmRequest } from "./elements/ManageRequest";
+export { default as CeFcPayment } from "./elements/CreateFromPayment";

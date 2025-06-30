@@ -26,7 +26,7 @@ import { CeIacHcNo } from "@homecarre-ui";
 const { TextArea } = Input;
 const { Title, Text } = Typography;
 
-const CreateFromPayment = () => {
+const CreateFromPayment = ({ initialData, onSuccess }) => {
   const [form] = Form.useForm();
   const router = useRouter();
   const { searchHcNo } = hcContacts;
@@ -40,7 +40,7 @@ const CreateFromPayment = () => {
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    hc_no: "",
+    hc_no: initialData?.hc_no || "",
     rent_price: 0,
     due_date: null,
     payment_month: null,
@@ -52,22 +52,6 @@ const CreateFromPayment = () => {
   const onValuesChange = (changedValues, allValues) => {
     setFormData(allValues);
   };
-
-  // const handleSearchHcNo = useMemo(
-  //   () =>
-  //     debounce(async (value) => {
-  //       if (!value || value.length < 2) return;
-  //       const response = await searchHcNo(value);
-  //       if (response?.isSuccess) {
-  //         if (response.data.length > 0) {
-  //           setHcNoOptions(response.data.map((hc_no) => ({ value: hc_no })));
-  //         } else {
-  //           setHcNoOptions([]);
-  //         }
-  //       }
-  //     }, 200),
-  //   []
-  // );
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -93,7 +77,7 @@ const CreateFromPayment = () => {
       });
       form.resetFields();
       setFormData({
-        hc_no: "",
+        hc_no: initialData?.hc_no || "",
         rent_price: 0,
         due_date: null,
         payment_month: null,
@@ -102,7 +86,7 @@ const CreateFromPayment = () => {
         payment_note: "",
       });
     }
-    router.push("/payment");
+    onSuccess?.();
   };
 
   const loadPaymentTypes = async () => {
@@ -122,7 +106,11 @@ const CreateFromPayment = () => {
 
   useEffect(() => {
     loadPaymentTypes();
-  }, []);
+    if (initialData) {
+      form.setFieldsValue({ hc_no: initialData?.hc_no });
+    }
+    console.log("data", initialData, initialData.hc_no);
+  }, [initialData]);
 
   return (
     <Row gutter={16}>
@@ -133,8 +121,9 @@ const CreateFromPayment = () => {
           onFinish={onFinish}
           onValuesChange={onValuesChange}
           initialValues={{
-            billing_to: "tenant",
+            hc_no: initialData?.hc_no || "",
             rent_price: 0,
+            billing_to: "tenant",
             payment_month: dayjs(),
           }}
         >
@@ -145,6 +134,7 @@ const CreateFromPayment = () => {
             rules={[{ required: true, message: "please input Homecarre No." }]}
           >
             <CeIacHcNo
+              value={form.getFieldValue("hc_no")}
               onSelect={(val) => {
                 if (form.getFieldValue("hc_no") !== val) {
                   form.setFieldValue("hc_no", val);
@@ -154,6 +144,7 @@ const CreateFromPayment = () => {
               onChange={(val) => {
                 setSelectedHcNo(null);
               }}
+              disabled={!!initialData}
             />
           </Form.Item>
 
@@ -242,7 +233,7 @@ const CreateFromPayment = () => {
 
           <p className="flex justify-between mt-4">
             <Text strong>Homecarre No.</Text>
-            <Text>{formData.hc_no || "-"}</Text>
+            <Text>{initialData?.hc_no || formData.hc_no || "-"}</Text>
           </p>
           <p className="flex justify-between">
             <Text strong>จำนวนเงิน:</Text>

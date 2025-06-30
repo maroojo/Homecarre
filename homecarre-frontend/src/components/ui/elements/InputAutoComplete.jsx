@@ -12,6 +12,7 @@ const InputAutoComplete = ({
   minLength = 2,
   debounceMs = 200,
   placeholder = "example: ",
+  disabled,
 }) => {
   const [options, setOptions] = useState([]);
 
@@ -29,12 +30,13 @@ const InputAutoComplete = ({
   return (
     <AutoComplete
       value={value}
+      disabled={disabled}
       options={options}
       onSearch={handleSearch}
       onSelect={onSelect}
       onChange={(val) => {
         if (val !== value) {
-          onChange(val);
+          onChange?.(val);
         }
       }}
       placeholder={placeholder}

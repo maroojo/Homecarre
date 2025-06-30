@@ -1,11 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import { useParams } from "next/navigation";
 import { hcPayment } from "@homecarre-api";
 import { ClTable, CtSearch, CtTable, CtPagination } from "@homecarre-ui";
 import { columns } from "./PaymentColumn";
 import useNotification from "@/hooks/useNotification";
+
+const CoModal = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CoModal),
+  { ssr: false }
+);
+const CeFcPayment = dynamic(
+  () => import("@homecarre-ui").then((mod) => mod.CeFcPayment),
+  { ssr: false }
+);
 
 const Payment = () => {
   const { hcID } = useParams();
@@ -22,6 +34,8 @@ const Payment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const loadInitialData = async (searchParams, page = 1) => {
     setLoading(true);
@@ -100,6 +114,14 @@ const Payment = () => {
     }
   };
 
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   useEffect(() => {
     if (hcID) {
       loadInitialData(searchKey, currentPage);
@@ -109,17 +131,17 @@ const Payment = () => {
   return (
     <div>
       <div>
-        {/* {data.map((item) => (
-          <PaymentCard 
-            key={item.payment_no}
-            payment={item}
-          />
-        ))} */}
         <ClTable
           onSearch={
             <CtSearch onSearch={handleSearch} statusOptions={searchStatus} />
           }
           total={total ?? "N/A"}
+          rightButton={
+            <Button onClick={() => handleOpenModal()}>
+              <PlusOutlined />
+              Billing
+            </Button>
+          }
           pagination={
             <CtPagination
               default={currentPage}
@@ -128,6 +150,26 @@ const Payment = () => {
               onChange={handlePageChange}
               className="mt-4 text-center"
             />
+          }
+          modal={
+            <CoModal
+              visible={modalOpen}
+              onClose={handleCloseModal}
+              width={"60%"}
+              maskClos={false}
+              title={"Create Billing"}
+            >
+              <div className="w-full mt-5">
+                <CeFcPayment
+                  initialData={{ hc_no: hcID }}
+                  onSuccess={() => {
+                    handleCloseModal();
+                    loadInitialData(searchKey, currentPage);
+                  }}
+                  onClose={() => setModalOpen(false)}
+                />
+              </div>
+            </CoModal>
           }
         >
           <CtTable

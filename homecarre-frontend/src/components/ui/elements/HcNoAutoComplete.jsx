@@ -17,10 +17,9 @@ const HcNoAutoComplete = (props) => {
 
   return (
     <CeIac
+      {...props}
       initialOptions={initialHcNoOptions}
       placeholder={"example : hc-000111"}
-      onSelect={props.onSelect}
-      onChange={props.onChange}
     />
   );
 };
