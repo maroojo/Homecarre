@@ -19,7 +19,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 import { hcContractManager } from "@homecarre-api";
-import { CeIsBank } from "@homecarre-ui";
+import { CeIsBank, CeIacClient } from "@homecarre-ui";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -29,18 +29,12 @@ const CreateContract = () => {
   const router = useRouter();
   const { createContract } = hcContractManager();
 
+  const [select, setSelect] = useState({});
+  const [create, setCreate] = useState({});
   const [removingKeys, setRemovingKeys] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const dateFormat = "DD-MM-YYYY";
-
-  const handleRemove = (name) => {
-    setRemovingKeys((prev) => [...prev, name]);
-    setTimeout(() => {
-      remove(name);
-      setRemovingKeys((prev) => prev.filter((key) => key !== name));
-    }, 300);
-  };
 
   const handleAccountChange = (e) => {
     const rawValue = e.target.value;
@@ -253,85 +247,183 @@ const CreateContract = () => {
                 },
               ]}
             >
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }, index) => {
-                    const isRemoving = removingKeys.includes(name);
-                    return (
-                      <div
-                        key={key}
-                        className={`transition-all duration-300 ease-in-out ${
-                          isRemoving
-                            ? "opacity-0 -translate-y-4"
-                            : "opacity-100 translate-y-0"
-                        }`}
-                      >
-                        <Space
+              {(fields, { add, remove }) => {
+                return (
+                  <>
+                    {fields.map(({ key, name, ...restField }, index) => {
+                      const isRemoving = removingKeys.includes(name);
+
+                      const handleRemove = (name) => {
+                        setRemovingKeys((prev) => [...prev, name]);
+
+                        setTimeout(() => {
+                          remove(name);
+
+                          setSelect((prev) => {
+                            const { [name]: _, ...rest } = prev;
+                            return rest;
+                          });
+                          setCreate((prev) => {
+                            const { [name]: _, ...rest } = prev;
+                            return rest;
+                          });
+
+                          setRemovingKeys((prev) =>
+                            prev.filter((key) => key !== name)
+                          );
+                        }, 300);
+                      };
+                      return (
+                        <div
                           key={key}
-                          style={{ display: "flex", marginBottom: 8 }}
-                          align="start"
+                          className={`transition-all duration-300 ease-in-out relative ${
+                            isRemoving
+                              ? "opacity-0 -translate-y-4"
+                              : "opacity-100 translate-y-0"
+                          }`}
                         >
-                          <Form.Item
-                            {...restField}
-                            name={[name, "client_code"]}
-                            label="Client Code"
+                          <Space
+                            key={key}
+                            style={{ display: "flex", marginBottom: 8 }}
+                            align="start"
                           >
-                            <Input placeholder="Optional" />
-                          </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              name={[name, "client_code"]}
+                              label="Search Client"
+                            >
+                              <CeIacClient
+                                value={form.getFieldValue([
+                                  "clients",
+                                  name,
+                                  "client_code",
+                                ])}
+                                onSelect={(item, list) => {
+                                  const client = list?.item?.client;
+                                  setSelect((prev) => ({
+                                    ...prev,
+                                    [name]: true,
+                                  }));
+                                  setCreate((prev) => ({
+                                    ...prev,
+                                    [name]: true,
+                                  }));
+                                  form.setFields([
+                                    {
+                                      name: ["clients", name, "client_code"],
+                                      value: item,
+                                    },
+                                    {
+                                      name: ["clients", name, "fullname"],
+                                      value: client.fullname,
+                                    },
+                                    {
+                                      name: [
+                                        "clients",
+                                        name,
+                                        "client_telephone",
+                                      ],
+                                      value: client.telephone,
+                                    },
+                                  ]);
+                                }}
+                                selectFromList
+                                // disabled={create[name]}
+                              />
+                            </Form.Item>
 
-                          <Form.Item
-                            {...restField}
-                            name={[name, "fullname"]}
-                            label="Full Name"
-                            rules={[{ required: true, message: "Required" }]}
-                          >
-                            <Input />
-                          </Form.Item>
+                            <div
+                              className={`transition-all duration-600 ease-in-out mt-6 ml-5 ${
+                                create[name]
+                                  ? "opacity-0 -translate-x-4 absolute"
+                                  : "visible"
+                              }`}
+                            >
+                              <Button
+                                type="dashed"
+                                onClick={() => {
+                                  setCreate((prev) => ({
+                                    ...prev,
+                                    [name]: true,
+                                  }));
+                                  setSelect((prev) => ({
+                                    ...prev,
+                                    [name]: true,
+                                  }));
+                                }}
+                                block
+                                icon={<PlusOutlined />}
+                              >
+                                New
+                              </Button>
+                            </div>
 
-                          <Form.Item
-                            {...restField}
-                            name={[name, "client_telephone"]}
-                            label="Telephone"
-                          >
-                            <Input />
-                          </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              name={[name, "fullname"]}
+                              label="Full Name"
+                              rules={[{ required: true, message: "Required" }]}
+                              className={`transition-all duration-600 ease-in-out ${
+                                select[name] ? "opacity-100 " : "opacity-0 "
+                              }`}
+                            >
+                              <Input />
+                            </Form.Item>
 
-                          <Form.Item
-                            {...restField}
-                            name={[name, "client_type"]}
-                            label="Type"
-                            rules={[
-                              { required: true, message: "Please select type" },
-                            ]}
-                          >
-                            <Select placeholder="Select client type">
-                              <Option value="owner">Owner</Option>
-                              <Option value="tenant">Tenant</Option>
-                            </Select>
-                          </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              name={[name, "client_telephone"]}
+                              label="Telephone"
+                              className={
+                                select[name] ? "opacity-100 " : "opacity-0 "
+                              }
+                            >
+                              <Input />
+                            </Form.Item>
 
-                          {index >= 2 && (
-                            <MinusCircleOutlined
-                              onClick={() => remove(name)}
-                              style={{ marginTop: 30 }}
-                            />
-                          )}
-                        </Space>
-                      </div>
-                    );
-                  })}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add Client
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
+                            <Form.Item
+                              {...restField}
+                              name={[name, "client_type"]}
+                              label="Type"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Please select type",
+                                },
+                              ]}
+                              className={select[name] ? "visible" : "hidden"}
+                            >
+                              <Select placeholder="Select client type">
+                                <Option value="owner">Owner</Option>
+                                <Option value="tenant">Tenant</Option>
+                              </Select>
+                            </Form.Item>
+
+                            {index >= 2 && (
+                              <MinusCircleOutlined
+                                onClick={() => {
+                                  handleRemove(name);
+                                }}
+                                style={{ marginTop: 30, fontSize: 30 }}
+                              />
+                            )}
+                          </Space>
+                        </div>
+                      );
+                    })}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Client
+                      </Button>
+                    </Form.Item>
+                  </>
+                );
+              }}
             </Form.List>
 
             <Form.Item>
