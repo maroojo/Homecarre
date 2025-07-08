@@ -15,10 +15,12 @@ const InputAutoComplete = ({
   placeholder = "example: ",
   disabled,
   selectFromList = false,
+  notFoundLabel = "ไม่พบข้อมูล",
 }) => {
   const [options, setOptions] = useState([]);
   const [clientData, setClientData] = useState([]);
   const [hasSelected, setHasSelected] = useState(false);
+  const [searching, setSearching] = useState(false);
 
   const getHighlightedText = (text, highlight) => {
     const regex = new RegExp(`(${highlight})`, "gi");
@@ -40,15 +42,17 @@ const InputAutoComplete = ({
         if (!text) {
           setOptions([]);
           setClientData([]);
+          setSearching(false);
           return;
         }
-        if (text.length < minLength) return;
+        setSearching(true);
 
         const results = await initialOptions(text);
         if (!Array.isArray(results)) {
           console.warn("initialOptions did not return array:", results);
           setOptions([]);
           setClientData([]);
+          setSearching(true);
           return;
         }
 
@@ -61,11 +65,13 @@ const InputAutoComplete = ({
         setOptions(mapped);
         setClientData(results);
         setHasSelected(false);
+        setSearching(true);
       }, debounceMs),
     [initialOptions, debounceMs, minLength]
   );
 
   const handleSelect = (val, option) => {
+    if (val === "notfound") return;
     setHasSelected(true);
     if (onSelectItem) {
       onSelectItem(option.item || option);
@@ -98,6 +104,11 @@ const InputAutoComplete = ({
       placeholder={placeholder}
       style={{ width: "100%" }}
       popupMatchSelectWidth={false}
+      notFoundContent={
+        searching ? (
+          <span style={{ color: "gray" }}>{notFoundLabel}</span>
+        ) : null
+      }
     />
   );
 };

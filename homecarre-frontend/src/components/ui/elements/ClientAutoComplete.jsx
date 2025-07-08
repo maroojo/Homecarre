@@ -23,7 +23,8 @@ const ClientAutoComplete = (props) => {
       {...props}
       debounceMs={300}
       initialOptions={initialClientOption}
-      placeholder="name telephone code"
+      placeholder="search client name telephone code"
+      notFoundLabel='ไม่พบข้อมูล กด "New" เพื่อสร้าง'
     />
   );
 };

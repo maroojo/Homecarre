@@ -19,7 +19,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 import { hcContractManager } from "@homecarre-api";
-import { CeIsBank, CeIacClient } from "@homecarre-ui";
+import { CeIsBank, CeIacClient, CeIsPropertyTypes } from "@homecarre-ui";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -114,7 +114,7 @@ const CreateContract = () => {
               </Col>
               <Col span={7}>
                 <Form.Item name="type" label="Type">
-                  <Input />
+                  <CeIsPropertyTypes />
                 </Form.Item>
               </Col>
             </Row>
@@ -291,6 +291,9 @@ const CreateContract = () => {
                               {...restField}
                               name={[name, "client_code"]}
                               label="Search Client"
+                              className={`transition-all duration-600 ease-in-out ${
+                                create[name] ? "translate-x" : "absolute w-3/4"
+                              } `}
                             >
                               <CeIacClient
                                 value={form.getFieldValue([
@@ -328,15 +331,14 @@ const CreateContract = () => {
                                   ]);
                                 }}
                                 selectFromList
-                                // disabled={create[name]}
                               />
                             </Form.Item>
 
                             <div
                               className={`transition-all duration-600 ease-in-out mt-6 ml-5 ${
                                 create[name]
-                                  ? "opacity-0 -translate-x-4 absolute"
-                                  : "visible"
+                                  ? "opacity-0 right-18 translate-x-4 absolute"
+                                  : "visible absolute right-18"
                               }`}
                             >
                               <Button
@@ -391,7 +393,7 @@ const CreateContract = () => {
                                   message: "Please select type",
                                 },
                               ]}
-                              className={select[name] ? "visible" : "hidden"}
+                              className={select[name] ? "visible" : "hidden "}
                             >
                               <Select placeholder="Select client type">
                                 <Option value="owner">Owner</Option>
@@ -404,7 +406,12 @@ const CreateContract = () => {
                                 onClick={() => {
                                   handleRemove(name);
                                 }}
-                                style={{ marginTop: 30, fontSize: 30 }}
+                                style={{
+                                  marginTop: 30,
+                                  fontSize: 30,
+                                  position: "absolute",
+                                  right: 0,
+                                }}
                               />
                             )}
                           </Space>
