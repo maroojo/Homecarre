@@ -42,7 +42,7 @@ const InputAutoComplete = ({
         if (!text) {
           setOptions([]);
           setClientData([]);
-          setSearching(false);
+          setSearching(true);
           return;
         }
         setSearching(true);
