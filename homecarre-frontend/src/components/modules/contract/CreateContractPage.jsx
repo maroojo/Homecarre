@@ -100,7 +100,7 @@ const CreateContract = () => {
                 ],
               }}
             >
-              <div className="bg-background px-8 rounded-2xl pt-5 w-full">
+              <div className="bg-background px-8 rounded-2xl pt-5 w-full shadow-md shadow-accent">
                 <Typography.Title level={4}>Property Info</Typography.Title>
                 <Row gutter={16}>
                   <Col span={5}>
