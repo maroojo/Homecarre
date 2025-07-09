@@ -107,7 +107,7 @@ const InputAutoComplete = ({
       popupMatchSelectWidth={false}
       notFoundContent={
         searching ? (
-          <span style={{ color: "gray" }}>{notFoundLabel}</span>
+          <div style={{ color: "gray" }}>{notFoundLabel}</div>
         ) : null
       }
     />

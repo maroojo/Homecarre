@@ -24,7 +24,14 @@ const ClientAutoComplete = (props) => {
       debounceMs={300}
       initialOptions={initialClientOption}
       placeholder="search client name telephone code"
-      notFoundLabel='ไม่พบข้อมูล กด "New" เพื่อสร้าง'
+      notFoundLabel={
+        <>
+          ไม่พบข้อมูล! กรุณาตรวจสอบความถูกต้อง
+          <hr className="my-3 text-border" />
+          หรือกด <strong className="text-primary-base">+ New</strong>{" "}
+          เพื่อสร้างใหม่
+        </>
+      }
     />
   );
 };
