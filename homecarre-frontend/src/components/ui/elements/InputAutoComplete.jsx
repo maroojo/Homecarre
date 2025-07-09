@@ -16,6 +16,7 @@ const InputAutoComplete = ({
   disabled,
   selectFromList = false,
   notFoundLabel = "ไม่พบข้อมูล",
+  width,
 }) => {
   const [options, setOptions] = useState([]);
   const [clientData, setClientData] = useState([]);
